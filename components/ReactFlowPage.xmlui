@@ -10,94 +10,6 @@
     </VStack>
   </ModalDialog>
 
-  <ModalDialog id="sdBaseInfo" title="SD-BASE">
-    <Markdown>
-      <![CDATA[
-The base level 'service delivery relationship' agreement is a very important piece of the MyTerms story. It is the base/default relationship agreement that should be in place for any individual using an agent to propose a MyTerms agreement to an organisation.
-      ]]>
-    </Markdown>
-  </ModalDialog>
-
-  <ModalDialog id="pdcAiInfo" title="SD-BY-DP">
-    <Markdown>
-      <![CDATA[
-An agreement that indicates you are willing to provide access to specific data under your control for the purposes of Training and Operating AI technologies.
-      ]]>
-    </Markdown>
-  </ModalDialog>
-
-  <ModalDialog id="agreementsDialog" title="Possible MyTerms Agreements">
-    <VStack gap="$space-2">
-      <Text fontSize="$fontSize-small" color="$textColor-secondary">
-        Public Website
-      </Text>
-      <HStack verticalAlignment="center" gap="$space-1">
-        <Text>
-          SD-BASE
-        </Text>
-        <Icon
-          name="info"
-          tooltip="SD-BASE details"
-          width="14px"
-          height="14px"
-          color="$color-primary"
-          cursor="pointer"
-          onClick="sdBaseInfo.open()" />
-      </HStack>
-      <HStack verticalAlignment="center" gap="$space-1">
-        <Text>
-          SD-BY-DP
-        </Text>
-        <Icon
-          name="info"
-          tooltip="SD-BY-DP details"
-          width="14px"
-          height="14px"
-          color="$color-primary"
-          cursor="pointer"
-          onClick="pdcAiInfo.open()" />
-      </HStack>
-    </VStack>
-  </ModalDialog>
-
-  <ModalDialog id="auditTrailDialog" title="Audit Trail">
-    <VStack gap="$space-2">
-      <Text fontWeight="bold">
-        Signed Agreement: {offeredTerm}
-      </Text>
-      <Text fontSize="$fontSize-small" color="$textColor-secondary">
-        Both parties have signed. Identical copies stored:
-      </Text>
-      <HStack gap="$space-2">
-        <VStack gap="$space-1">
-          <Text fontWeight="bold" fontSize="$fontSize-small">
-            Alice
-          </Text>
-          <Text fontSize="$fontSize-small">
-            Stored in personal data store
-          </Text>
-          <Text fontSize="$fontSize-small" color="$color-success">
-            Verified
-          </Text>
-        </VStack>
-        <VStack gap="$space-1">
-          <Text fontWeight="bold" fontSize="$fontSize-small">
-            Kleindorfers
-          </Text>
-          <Text fontSize="$fontSize-small">
-            Stored in entity data store
-          </Text>
-          <Text fontSize="$fontSize-small" color="$color-success">
-            Verified
-          </Text>
-        </VStack>
-      </HStack>
-      <Text fontSize="$fontSize-small" color="$textColor-secondary">
-        Public record available on Public Website
-      </Text>
-    </VStack>
-  </ModalDialog>
-
   <DataSource
     id="layoutData"
     url="layout.json"
@@ -117,11 +29,6 @@ An agreement that indicates you are willing to provide access to specific data u
     interval="{pulseDuration * 2}"
     onTick="{() => { onRoundTripTimerComplete() }}" />
 
-  <!-- Node-driven completion: term selection -->
-  <ChangeListener
-    listenTo="{offeredTerm}"
-    onDidChange="{() => { onTermSelected() }}" />
-
   <!-- Pulse sequence engine -->
   <Timer
     enabled="{pulse.active}"
@@ -132,11 +39,6 @@ An agreement that indicates you are willing to provide access to specific data u
   <ChangeListener
     listenTo="{pulse.active}"
     onDidChange="{() => { if (!pulse.active && running) { onPulseSequenceComplete() } }}" />
-
-  <!-- Domain: agreement decision from pulse edge -->
-  <ChangeListener
-    listenTo="{pulse.currentEdge}"
-    onDidChange="{(change) => onPulseEdgeChange(change)}" />
 
   <Stack
     height="calc(100vh - 48px)"
@@ -152,14 +54,13 @@ An agreement that indicates you are willing to provide access to specific data u
       showMinimap="{false}"
       showControls="{true}"
       showBackground="{true}"
-      onEdgeInfoClick="{(e) => { if (e.edgeId === 'e-pa-ea') { agreementsDialog.open() } else if (e.edgeId === 'e-signed') { auditTrailDialog.open() } else { edgeLabel = e.label; edgeId = e.edgeId; edgeInfoDialog.open() } }}"
-      nodes="{(phase, phaseLabel, phaseMessage, buttonLabel, buttonEnabled, pulse.active, pulse.currentEdge, offeredTerm, agreementDecision, agreementCount, acceptedCount, aliceDataStore.length, kleindorfersDataStore.length, getNodes())}"
+      onEdgeInfoClick="{(e) => { edgeLabel = e.label; edgeId = e.edgeId; edgeInfoDialog.open() }}"
+      nodes="{(phase, phaseLabel, phaseMessage, buttonLabel, buttonEnabled, running, stepIndex, pulse.active, pulse.currentEdge, trigger, getNodes())}"
       edges="{getEdges()}">
       <PersonNode />
       <PersonAgentNode />
       <AgreementsPanel />
       <EntityAgentNode />
-      <EntityNode />
       <HStack>
         <H1>
           {phaseLabel} {phaseMessage}

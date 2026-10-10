@@ -1,27 +1,12 @@
 <Component name="AgreementsPanel">
-  <VStack gap="$space-2" padding="$space-2" fontSize="$fontSize-sm">
+  <VStack gap="$space-1" padding="$space-2">
     <Text fontWeight="bold" textAlign="center">
       Agent's home
     </Text>
     <Text fontSize="$fontSize-small" color="$textColor-secondary">
       vouches for your agent · judell.github.io
     </Text>
-    <VStack gap="$space-1">
-      <Text fontWeight="bold" fontSize="$fontSize-small">
-        SD-BASE
-      </Text>
-      <Text fontSize="$fontSize-small">
-        The base level service delivery relationship agreement. The default agreement for any individual using an agent to propose a MyTerms agreement to an organisation. It says you only use my information to provide the service.
-      </Text>
-    </VStack>
-    <VStack gap="$space-1">
-      <Text fontWeight="bold" fontSize="$fontSize-small">
-        SD-BY-DP
-      </Text>
-      <Text fontSize="$fontSize-small">
-        Extends SD-BASE with a requirement for data portability.
-      </Text>
-    </VStack>
-
+    <Text fontSize="$fontSize-small">publishes: profile (judell)</Text>
+    <Text fontSize="$fontSize-small">publishes: public key 2026-10-09_0af</Text>
   </VStack>
 </Component>

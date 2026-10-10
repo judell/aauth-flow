@@ -1,50 +1,35 @@
 <Component name="PersonNode">
   <ModalDialog id="personHelp" title="You">
     <Text>
-      The person the agent acts for. You come in only when a service asks who the agent is working for, and only with your approval.
-    </Text>
-  </ModalDialog>
-  <ModalDialog id="personMagnet" title="Alices Terms">
-    <Text>
-      This magnet represents the persons side of the agreement. When attracted, it binds the persons chosen terms into the contract.
+      The person the agent acts for. You start things: by acting yourself, or by setting up a schedule that acts for you.
     </Text>
   </ModalDialog>
   <VStack gap="$space-1" padding="$space-2">
-    <HStack horizontalAlignment="end">
-      <Text
-        fontSize="2rem"
-        color="$color-primary"
-        cursor="pointer"
-        onClick="personMagnet.open()">
-        ⊂
-      </Text>
-    </HStack>
     <HStack horizontalAlignment="center" verticalAlignment="center" gap="$space-2">
       <Icon name="person" width="24px" height="24px" />
       <Text fontWeight="bold" fontSize="$fontSize-lg">You</Text>
     </HStack>
-    <Text fontSize="$fontSize-small" color="$textColor-secondary">Jon, signing in with Microsoft</Text>
-    <Select
-      placeholder="Choose a term..."
-      initialValue="{offeredTerm}"
-      onDidChange="{(val) => { offeredTerm = val }}"
-      enabled="{offeredTerm === ''}"
-      when="{phase === 3}">
-      <Option value="SD-BASE" label="SD-BASE" />
-      <Option value="SD-BY-DP" label="SD-BY-DP" />
-    </Select>
-    <Text fontSize="$fontSize-small" fontWeight="bold">Personal Data Store</Text>
-    <Table data="{alicePersonalDataStore}" fontSize="$fontSize-small" noDataTemplate="">
-      <Column bindTo="term" header="Agreement" width="2*" />
-      <Column bindTo="counterparty" header="With" />
-      <Column bindTo="timestamp" header="Date" />
-    </Table>
-    <Text when="{phase === 7 && offeredTerm === 'SD-BASE' && agreementDecision === 'yes'}" marginTop="$space-8">
-    "Now I can do business with Kleindorfer's on a trusted basis."
-    </Text>
-    <Text when="{phase === 7 && offeredTerm === 'SD-BY-DP' && agreementDecision === 'no'}" marginTop="$space-8">
-    "I'm not sure I want to do business with Kleindorfer's."
-    </Text>
-
+    <VStack gap="$space-1">
+      <Text fontSize="$fontSize-small" color="$textColor-secondary">Interactive</Text>
+      <Button
+        label="Buy"
+        enabled="{stepIndex === 0 && !running}"
+        onClick="startBuy('interactive')" />
+    </VStack>
+    <ContentSeparator />
+    <VStack gap="$space-1">
+      <Text fontSize="$fontSize-small" color="$textColor-secondary">Scheduled</Text>
+      <HStack verticalAlignment="center" gap="$space-2">
+        <Icon
+          name="calendar-clock"
+          tooltip="Fire the schedule"
+          aria-label="Fire the schedule"
+          width="24px"
+          height="24px"
+          cursor="pointer"
+          onClick="startBuy('scheduled')" />
+        <Text fontSize="$fontSize-small">weekly reorder</Text>
+      </HStack>
+    </VStack>
   </VStack>
 </Component>

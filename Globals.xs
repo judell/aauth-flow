@@ -23,19 +23,12 @@ function nextStep() {
   if (step.restartOnAction) {
     const api = window.__reactFlowCanvasApi;
     api.clearPulse();
-    // Remove accumulated signed edges
-    for (let i = 1; i <= acceptedCount; i++) {
-      api.removeEdge('e-signed-' + i);
+    const ids = sceneEdgeIds();
+    for (let i = 0; i < ids.length; i++) {
+      api.removeEdge(ids[i]);
     }
-    offeredTerm = '';
-    agreementDecision = '';
-    acceptedCount = 0;
-    kleindorfersTerms = [
-      { terms: 'SD-BASE', policy: 'Accept' },
-      { terms: 'SD-BY-DP', policy: 'Reject' },
-    ];
-    // Restart goes to step 1 (lookup), not step 0 (delegate) on subsequent runs
-    applyStep(hasDelegated ? 1 : 0);
+    trigger = '';
+    applyStep(0);
     return;
   }
 
@@ -66,10 +59,6 @@ function nextStep() {
     }
   }
 
-  // Mark first delegation
-  if (step.id === 'delegate') {
-    hasDelegated = true;
-  }
 }
 
 function completeCurrentStep() {
@@ -143,185 +132,113 @@ function onRoundTripTimerComplete() {
 function onPulseSequenceComplete() {
   if (running && !pulse.active) {
     const step = getProcessFlowSteps()[stepIndex];
-    // Only complete if this step uses pulse sequences (send, proffer)
-    if (step.id === 'send' || (step.run && step.run.some(e => e.type === 'pulseSequence'))) {
+    // Only complete if this step uses pulse sequences
+    if (step.run && step.run.some(e => e.type === 'pulseSequence')) {
       completeCurrentStep();
     }
   }
 }
 
-function onTermSelected() {
-  if (offeredTerm !== '' && phase === 3) {
-    // Node-driven step advance: user chose a term
-    stepIndex = findStepIndex('send');
-    sendTermEffects();
-    running = true;
-  }
-}
-
-function sendTermEffects() {
-  phase = 'sending';
+// Node-driven start: the Buy button or the schedule icon in PersonNode
+function startBuy(kind) {
+  if (stepIndex !== 0 || running) return;
+  trigger = kind;
+  const scheduled = kind === 'scheduled';
+  const label = scheduled ? 'schedule fires: buy' : 'buy';
   buttonEnabled = false;
+  running = true;
   const api = window.__reactFlowCanvasApi;
-  api.addEdge('e-p-pa-send', 'person', 'person-agent', 'bottom-right', 'top-right', 'send', false, { labelPosition: 60 });
-  pulse = { active: true, edges: ['send'], step: 0, currentEdge: 'lookup' };
-}
-
-// --- Domain helpers ---
-
-function responsive(small, large) {
-  return mediaSize.sizeIndex <= 2 ? small : large;
-}
-
-function makeStoreEntry(term, counterparty) {
-  return {
-    term: term,
-    counterparty: counterparty,
-    timestamp: new Date().toISOString(),
-    country: "USA",
-  };
-}
-
-function lookupTermPolicy(term) {
-  for (let i = 0; i < kleindorfersTerms.length; i++) {
-    if (kleindorfersTerms[i].terms === term) return kleindorfersTerms[i].policy;
-  }
-  return "Reject";
-}
-
-function onPulseEdgeChange(change) {
-  if (change.newValue === "proffers" && offeredTerm !== "") {
-    agreementDecision =
-      kleindorfersTerms.find(t => t.terms === offeredTerm) &&
-      kleindorfersTerms.find(t => t.terms === offeredTerm).policy === "Accept"
-        ? "yes"
-        : "no";
-  }
-}
-
-function stepLabel(n) {
-  return String(n - (hasDelegated ? 1 : 0));
+  api.addEdge('e-you-agent', 'person', 'person-agent',
+    scheduled ? 'right-bottom' : 'right-top',
+    scheduled ? 'left-bottom' : 'left-top', label);
+  api.pulseEdge(label, pulseDuration);
 }
 
 // --- Step declarations ---
 
+// Edges this scene adds; restart removes them
+function sceneEdgeIds() {
+  return ['e-you-agent', 'e-agent-home', 'e-home-agent', 'e-agent-svc', 'e-svc-home', 'e-svc-agent'];
+}
+
 function getProcessFlowSteps() {
   return [
     {
-      id: 'delegate',
+      id: 'trigger',
       title: '1',
-      message: "Alice and Kleindorfer's delegate agency",
-      actionLabel: 'Delegate',
+      message: 'You buy something, or a schedule does it for you',
+      actionLabel: '',
+      actionEnabled: false,
       phase: 0,
-      runningPhase: 'delegating',
+      completeAfterMs: pulseDuration,
+      // Started by startBuy() from PersonNode, not by the control button
+    },
+    {
+      id: 'ask',
+      title: '2',
+      message: 'Your agent needs to call the store, so it first asks its home for an ID card',
+      actionLabel: 'Ask',
+      phase: 1,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'clearPulse' },
-        { type: 'pulse', edge: 'delegates agency', durationMs: pulseDuration },
-        { type: 'pulse', edge: 'delegates personal agency', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-agent-home', source: 'person-agent', target: 'agreements', sourceHandle: 'top-left', targetHandle: 'bottom-left', label: 'asks for ID card' },
+        { type: 'pulse', edge: 'asks for ID card', durationMs: pulseDuration },
       ],
-      onEnter: () => {
-        offeredTerm = '';
-        agreementDecision = '';
-        acceptedCount = 0;
-        kleindorfersTerms = [
-          { terms: 'SD-BASE', policy: 'Accept' },
-          { terms: 'SD-BY-DP', policy: 'Reject' },
-        ];
-      },
     },
     {
-      id: 'lookup',
-      title: stepLabel(2),
-      message: 'Alice looks up terms',
-      actionLabel: 'Lookup',
-      phase: 1,
-      runningPhase: 2,
-      completeAfterRoundTrip: true,
+      id: 'issue',
+      title: '3',
+      message: 'Its home issues the ID card',
+      actionLabel: 'Issue',
+      phase: 2,
+      completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-p-ag', source: 'person', target: 'agreements', sourceHandle: 'right-top', targetHandle: 'left-top', label: 'lookup' },
-        { type: 'pulseRoundTrip', edge: 'lookup', durationMs: pulseDuration },
-      ],
-      cleanup: [
-        { type: 'removeEdge', edgeId: 'e-p-ag' },
+        { type: 'addEdge', id: 'e-home-agent', source: 'agreements', target: 'person-agent', sourceHandle: 'bottom-right', targetHandle: 'top-right', label: 'issues ID card' },
+        { type: 'pulse', edge: 'issues ID card', durationMs: pulseDuration },
       ],
     },
     {
-      id: 'choose-term',
-      title: stepLabel(3),
-      message: "Choose a term from Alice's list",
-      actionLabel: '',
+      id: 'request',
+      title: '4',
+      message: 'Your agent sends the buy request, signed, with its ID card',
+      actionLabel: 'Send',
       phase: 3,
-      actionEnabled: false,
-      // Completion is driven by onTermSelected() via ChangeListener on offeredTerm
-    },
-    {
-      id: 'send',
-      title: stepLabel(3),
-      message: "Sending term to Alice's agent",
-      phase: 'sending',
-      actionLabel: '',
-      actionEnabled: false,
-      cleanup: [
-        { type: 'removeEdge', edgeId: 'e-p-pa-send' },
-      ],
-      // Completion driven by pulse sequence finishing (ChangeListener on pulse.active)
-    },
-    {
-      id: 'proffer',
-      title: stepLabel(4),
-      message: "Alice's agent proffers agreement",
-      actionLabel: 'Proffer',
-      phase: 4,
-      runningPhase: 'proffering',
-      // Completion driven by pulse sequence finishing (ChangeListener on pulse.active)
+      completeAfterMs: pulseDuration,
       run: [
-        { type: 'pulseSequence', edges: ['proffers'] },
+        { type: 'addEdge', id: 'e-agent-svc', source: 'person-agent', target: 'entity-agent', sourceHandle: 'right-top', targetHandle: 'left-top', label: 'buy request + ID card' },
+        { type: 'pulse', edge: 'buy request + ID card', durationMs: pulseDuration },
       ],
     },
     {
-      id: 'consult',
-      title: stepLabel(5),
-      message: "Kleindorfer's agent consults policy",
-      actionLabel: 'Consult Policy',
-      phase: 5,
-      runningPhase: 'consulting',
+      id: 'check',
+      title: '5',
+      message: "The store checks the card against the home's published key",
+      actionLabel: 'Check',
+      phase: 4,
       completeAfterRoundTrip: true,
       run: [
-        { type: 'addEdge', id: 'e-ea-consult', source: 'entity-agent', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'top-left', label: 'consults policy' },
-        { type: 'pulseRoundTrip', edge: 'consults policy', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-svc-home', source: 'entity-agent', target: 'agreements', sourceHandle: 'top-left', targetHandle: 'right-bottom', label: 'checks card' },
+        { type: 'pulseRoundTrip', edge: 'checks card', durationMs: pulseDuration },
       ],
-      cleanup: [
-        { type: 'removeEdge', edgeId: 'e-ea-consult' },
-      ],
-      nextIf: [
-        { when: () => agreementDecision === 'yes', goto: 'done' },
-        { when: () => agreementDecision === 'no', goto: 'rejected' },
-      ],
-      onComplete: () => {
-        const status = agreementDecision === 'yes' ? 'accepted' : 'rejected';
-        alicePersonalDataStore = [...alicePersonalDataStore, makeStoreEntry(offeredTerm + ' (' + status + ')', "Kleindorfer's")];
-        kleindorfersOrgDataStore = [...kleindorfersOrgDataStore, makeStoreEntry(offeredTerm + ' (' + status + ')', 'Alice')];
-        if (agreementDecision === 'yes') {
-          acceptedCount = acceptedCount + 1;
-          window.__reactFlowCanvasApi.addEdge('e-signed-' + acceptedCount, 'person', 'entity-agent', 'right-magnet', 'left-magnet', 'signed: ' + offeredTerm + ' \u2282\u2283', true);
-        }
-      },
     },
     {
-      id: 'rejected',
-      title: stepLabel(6),
-      message: 'Agreement rejected',
-      actionLabel: 'Start Over',
-      phase: 7,
-      restartOnAction: true,
+      id: 'answer',
+      title: '6',
+      message: "The store knows which agent this is, but not who it's buying for",
+      actionLabel: 'Answer',
+      phase: 5,
+      completeAfterMs: pulseDuration,
+      run: [
+        { type: 'addEdge', id: 'e-svc-agent', source: 'entity-agent', target: 'person-agent', sourceHandle: 'left-bottom', targetHandle: 'right-bottom', label: '401 · who for?' },
+        { type: 'pulse', edge: '401 · who for?', durationMs: pulseDuration },
+      ],
     },
     {
       id: 'done',
-      title: stepLabel(6),
-      message: agreementDecision === 'yes' ? 'Agreement signed and posted to ledger' : 'Agreement rejected',
-      actionLabel: 'Start Over',
-      phase: 7,
+      title: '',
+      message: 'To finish the purchase, the store needs to know who your agent works for. Next: your sign-in.',
+      actionLabel: 'Start over',
+      phase: 6,
       restartOnAction: true,
     },
   ];
@@ -342,42 +259,16 @@ function makeNode(id, label, extra) {
 
 function getNodes() {
   return [
-    makeNode("person", "You", { magnetY: "12%" }),
+    makeNode("person", "You"),
     makeNode("person-agent", "Your agent"),
     makeNode("agreements", "Agent's home"),
-    makeNode("entity-agent", "Service", { magnetY: "22%" }),
-    makeNode("entity", "Your sign-in"),
+    makeNode("entity-agent", "Service"),
     makeNode("control", "Control", { chrome: false }),
   ];
 }
 
 function getEdges() {
-  return [
-    {
-      id: "e-p-pa",
-      source: "person",
-      target: "person-agent",
-      sourceHandle: "bottom-left",
-      targetHandle: "top-left",
-      data: { label: "delegates personal agency", labelPosition: 40 },
-    },
-    {
-      id: "e-pa-ea",
-      source: "person-agent",
-      target: "entity-agent",
-      sourceHandle: "right-top",
-      targetHandle: "left-bottom",
-      data: { label: "proffers" },
-    },
-    {
-      id: "e-ea-e",
-      source: "entity",
-      target: "entity-agent",
-      sourceHandle: "top-right",
-      targetHandle: "bottom-right",
-      data: { label: "delegates agency", labelPosition: 30 },
-    },
-  ];
+  return [];
 }
 
 function saveLayout() {

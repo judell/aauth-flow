@@ -9,19 +9,15 @@
       <Icon name="bot" width="24px" height="24px" />
       <Text fontWeight="bold" fontSize="$fontSize-lg">Your agent</Text>
     </HStack>
-    <Text fontSize="$fontSize-small" color="$textColor-secondary">aauth:local@judell.github.io</Text>
-    <Text
-      fontSize="$fontSize-small"
-      color="$textColor-secondary"
-      when="{phase < 4}">
-      Waiting for term...
+    <Text fontSize="$fontSize-small" color="$textColor-secondary" when="{phase < 3}">
+      no ID card yet
     </Text>
-    <Text
-      fontSize="$fontSize-small"
-      fontWeight="bold"
-      color="$color-primary"
-      when="{phase >= 3 && offeredTerm !== ''}">
-      Received: {offeredTerm}
-    </Text>
+    <VStack gap="$space-1" when="{phase >= 3}">
+      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">ID card</Text>
+      <Text fontSize="$fontSize-small">ID aauth:local@judell.github.io</Text>
+      <Text fontSize="$fontSize-small">home judell.github.io</Text>
+      <Text fontSize="$fontSize-small">signed with key 2026-10-09_0af</Text>
+      <Text fontSize="$fontSize-small">expires in 1 hour</Text>
+    </VStack>
   </VStack>
 </Component>
