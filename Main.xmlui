@@ -1,6 +1,6 @@
 <App
   layout="vertical-sticky"
-  name="MyTerms"
+  name="AAuth Walkthrough"
   global.offeredTerm="{''}"
   global.agreementDecision="{''}"
   global.agreementCount="{0}"
@@ -42,7 +42,7 @@
 
   <AppHeader>
     <Text fontWeight="bold">
-      MyTerms
+      AAuth Walkthrough
     </Text>
     <SpaceFiller />
     <Icon
@@ -62,18 +62,7 @@
       height="20px"
       color="$color-surface-500"
       cursor="pointer"
-      when="{isDevHost()}"
       onClick="saveLayout()" />
-    <Icon
-      name="rotate-ccw"
-      tooltip="Reset layout to layout.json"
-      aria-label="Reset layout to layout.json"
-      width="20px"
-      height="20px"
-      color="$color-surface-500"
-      cursor="pointer"
-      when="{isDevHost()}"
-      onClick="resetLayout()" />
       <Inspector />
   </AppHeader>
 

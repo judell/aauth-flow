@@ -1,14 +1,15 @@
 <Component name="PersonAgentNode">
-  <ModalDialog id="paHelp" title="Alice's Agent">
+  <ModalDialog id="paHelp" title="Your agent">
     <Text>
-      A software agent that acts on behalf of the person to negotiate and record agreements.
+      An AI agent with its own identity. It signs every request with a key that never leaves this machine, so there's no API key or bearer token to leak.
     </Text>
   </ModalDialog>
   <VStack gap="$space-1" padding="$space-2">
     <HStack verticalAlignment="center" horizontalAlignment="center" gap="$space-2">
       <Icon name="bot" width="24px" height="24px" />
-      <Text fontWeight="bold" fontSize="$fontSize-lg">Alice's Agent</Text>
+      <Text fontWeight="bold" fontSize="$fontSize-lg">Your agent</Text>
     </HStack>
+    <Text fontSize="$fontSize-small" color="$textColor-secondary">aauth:local@judell.github.io</Text>
     <Text
       fontSize="$fontSize-small"
       color="$textColor-secondary"

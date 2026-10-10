@@ -1,14 +1,15 @@
 <Component name="EntityNode">
-  <ModalDialog id="entityHelp" title="Kleindorfer's">
+  <ModalDialog id="entityHelp" title="Your sign-in">
     <Text>
-      An organization that presents terms and agrees to contract completion.
+      Vouches for you: "this person approved this agent." You sign in the usual way (Microsoft here), then confirm the agent. Hellō is the first place you can try it. (Spec term: person server.)
     </Text>
   </ModalDialog>
   <VStack gap="$space-1" padding="$space-2">
     <HStack verticalAlignment="center" horizontalAlignment="center" gap="$space-2">
       <Icon name="building2" width="24px" height="24px" />
-      <Text fontWeight="bold" fontSize="$fontSize-lg">Kleindorfer's</Text>
+      <Text fontWeight="bold" fontSize="$fontSize-lg">Your sign-in</Text>
     </HStack>
+    <Text fontSize="$fontSize-small" color="$textColor-secondary">vouches for you · Hellō</Text>
     <Text fontSize="$fontSize-small" fontWeight="bold">Policy Store</Text>
     <Table data="{kleindorfersTerms}" fontSize="$fontSize-small">
       <Column bindTo="terms" header="Terms" />

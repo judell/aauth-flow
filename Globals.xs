@@ -342,11 +342,11 @@ function makeNode(id, label, extra) {
 
 function getNodes() {
   return [
-    makeNode("person", "Alice", { magnetY: "12%" }),
-    makeNode("person-agent", "Alices Agent"),
-    makeNode("agreements", "Agreements"),
-    makeNode("entity-agent", "Kleindorfer's Agent", { magnetY: "22%" }),
-    makeNode("entity", "Kleindorfer's"),
+    makeNode("person", "You", { magnetY: "12%" }),
+    makeNode("person-agent", "Your agent"),
+    makeNode("agreements", "Agent's home"),
+    makeNode("entity-agent", "Service", { magnetY: "22%" }),
+    makeNode("entity", "Your sign-in"),
     makeNode("control", "Control", { chrome: false }),
   ];
 }
@@ -380,22 +380,8 @@ function getEdges() {
   ];
 }
 
-// --- Dev-time layout persistence (local hosts only) ---
-
-function isDevHost() {
-  const host = window.location.hostname;
-  return host === '127.0.0.1' || host === 'localhost';
-}
-
-function resetLayout() {
-  deleteLocalStorage('aauthFlow.layout');
-  window.location.reload();
-}
-
 function saveLayout() {
-  const current = window.__reactFlowCanvasApi.getLayout();
-  writeLocalStorage('aauthFlow.layout', current);
-  const json = JSON.stringify(current, null, 2);
+  const json = JSON.stringify(window.__reactFlowCanvasApi.getLayout(), null, 2);
   const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');

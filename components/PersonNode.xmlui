@@ -1,7 +1,7 @@
 <Component name="PersonNode">
-  <ModalDialog id="personHelp" title="Person">
+  <ModalDialog id="personHelp" title="You">
     <Text>
-      An individual who presents credentials and agrees to contract terms.
+      The person the agent acts for. You come in only when a service asks who the agent is working for, and only with your approval.
     </Text>
   </ModalDialog>
   <ModalDialog id="personMagnet" title="Alices Terms">
@@ -21,8 +21,9 @@
     </HStack>
     <HStack horizontalAlignment="center" verticalAlignment="center" gap="$space-2">
       <Icon name="person" width="24px" height="24px" />
-      <Text fontWeight="bold" fontSize="$fontSize-lg">Alice</Text>
+      <Text fontWeight="bold" fontSize="$fontSize-lg">You</Text>
     </HStack>
+    <Text fontSize="$fontSize-small" color="$textColor-secondary">Jon, signing in with Microsoft</Text>
     <Select
       placeholder="Choose a term..."
       initialValue="{offeredTerm}"

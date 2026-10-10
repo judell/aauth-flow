@@ -1,6 +1,6 @@
 <Component name="EntityAgentNode">
-  <ModalDialog id="eaHelp" title="Kleindorfer's Agent">
-    <Text>A software agent that acts on behalf of the entity to negotiate and record agreements.</Text>
+  <ModalDialog id="eaHelp" title="Service">
+    <Text>The service the agent calls. Here it's a test service that echoes who's calling; imagine Zoom.</Text>
   </ModalDialog>
   <ModalDialog id="eaMagnet" title="Kleindorfer's Agent Terms">
     <Text>This magnet represents the entity agent acceptance criteria. When attracted, it confirms the entity willingness to bind to the offered terms.</Text>
@@ -11,8 +11,9 @@
     </HStack>
     <HStack verticalAlignment="center" horizontalAlignment="center" gap="$space-2">
       <Icon name="bot" width="24px" height="24px" />
-      <Text fontWeight="bold" fontSize="$fontSize-lg">Kleindorfer's Agent</Text>
+      <Text fontWeight="bold" fontSize="$fontSize-lg">Service</Text>
     </HStack>
+    <Text fontSize="$fontSize-small" color="$textColor-secondary">whoami.aauth.dev</Text>
     <Text fontSize="$fontSize-small" color="$textColor-secondary" when="{phase < 5}">No term offered yet</Text>
     <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary" when="{phase >= 5 && phase < 6}">Received: {offeredTerm}</Text>
     <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-success" when="{phase >= 6 && lookupTermPolicy(offeredTerm) === 'Accept'}">Accepted: {offeredTerm}</Text>
