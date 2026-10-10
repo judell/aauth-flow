@@ -59,10 +59,21 @@
       tooltip="Save layout"
       aria-label="Save layout"
       width="20px"
-      height="20x"
+      height="20px"
       color="$color-surface-500"
       cursor="pointer"
+      when="{isDevHost()}"
       onClick="saveLayout()" />
+    <Icon
+      name="rotate-ccw"
+      tooltip="Reset layout to layout.json"
+      aria-label="Reset layout to layout.json"
+      width="20px"
+      height="20px"
+      color="$color-surface-500"
+      cursor="pointer"
+      when="{isDevHost()}"
+      onClick="resetLayout()" />
       <Inspector />
   </AppHeader>
 

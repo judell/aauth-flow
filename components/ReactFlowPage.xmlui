@@ -101,7 +101,7 @@ An agreement that indicates you are willing to provide access to specific data u
   <DataSource
     id="layoutData"
     url="layout.json"
-    onLoaded="{(data) => { layout = data }}" />
+    onLoaded="{(data) => { layout = isDevHost() ? readLocalStorage('aauthFlow.layout', data) : data }}" />
 
   <!-- Step machine completion triggers -->
 

@@ -380,8 +380,22 @@ function getEdges() {
   ];
 }
 
+// --- Dev-time layout persistence (local hosts only) ---
+
+function isDevHost() {
+  const host = window.location.hostname;
+  return host === '127.0.0.1' || host === 'localhost';
+}
+
+function resetLayout() {
+  deleteLocalStorage('aauthFlow.layout');
+  window.location.reload();
+}
+
 function saveLayout() {
-  const json = JSON.stringify(window.__reactFlowCanvasApi.getLayout(), null, 2);
+  const current = window.__reactFlowCanvasApi.getLayout();
+  writeLocalStorage('aauthFlow.layout', current);
+  const json = JSON.stringify(current, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
