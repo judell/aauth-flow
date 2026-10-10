@@ -67,6 +67,8 @@
         </H1>
         <ControlNode />
       </HStack>
+      <!-- Last: pairs by order with the node getNodes() appends from scene 2 -->
+      <EntityNode />
     </ReactFlowCanvas>
   </Stack>
 </Component>

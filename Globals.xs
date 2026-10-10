@@ -158,7 +158,12 @@ function startBuy(kind) {
 
 // Edges this scene adds; restart removes them
 function sceneEdgeIds() {
-  return ['e-you-agent', 'e-agent-home', 'e-home-agent', 'e-agent-svc', 'e-svc-home', 'e-svc-agent'];
+  return ['e-you-agent', 'e-agent-home', 'e-home-agent', 'e-agent-svc', 'e-svc-home', 'e-svc-agent',
+    'e-agent-signin', 'e-signin-agent', 'e-agent-you', 'e-you-signin', 'e-signin-pass'];
+}
+
+function notifyLabel() {
+  return trigger === 'scheduled' ? 'notification: approve · HBHK-S3ZN' : 'approve here · HBHK-S3ZN';
 }
 
 function getProcessFlowSteps() {
@@ -233,12 +238,85 @@ function getProcessFlowSteps() {
         { type: 'pulse', edge: '401 · who for?', durationMs: pulseDuration },
       ],
     },
+    // --- Scene 2: who is your agent working for? (walkthrough-2 round A) ---
+    {
+      id: 'signin',
+      title: '7',
+      message: 'The store needs to know who your agent works for, so your agent turns to your sign-in',
+      actionLabel: 'Continue',
+      phase: 6,
+      runningPhase: 6.5,
+      completeAfterMs: pulseDuration,
+      // Your sign-in joins the canvas at phase >= 6.5 (getNodes)
+    },
+    {
+      id: 'vouch',
+      title: '8',
+      message: 'Your agent asks your sign-in to vouch for its person, for this store',
+      actionLabel: 'Ask',
+      phase: 7,
+      completeAfterMs: pulseDuration,
+      run: [
+        { type: 'addEdge', id: 'e-agent-signin', source: 'person-agent', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'top-left', label: 'vouch for my person?' },
+        { type: 'pulse', edge: 'vouch for my person?', durationMs: pulseDuration },
+      ],
+    },
+    {
+      id: 'reply',
+      title: '9',
+      message: 'Your sign-in says a person must approve, and hands back a code',
+      actionLabel: 'Reply',
+      phase: 8,
+      completeAfterMs: pulseDuration,
+      run: [
+        { type: 'addEdge', id: 'e-signin-agent', source: 'entity', target: 'person-agent', sourceHandle: 'top-right', targetHandle: 'bottom-right', label: '202 · approve · HBHK-S3ZN' },
+        { type: 'pulse', edge: '202 · approve · HBHK-S3ZN', durationMs: pulseDuration },
+      ],
+    },
+    {
+      id: 'notify',
+      title: '10',
+      message: trigger === 'scheduled'
+        ? 'Nobody is at the keyboard, so your agent sends you a link to approve within 10 minutes'
+        : 'Your agent shows you where to approve',
+      actionLabel: 'Notify',
+      phase: 9,
+      completeAfterMs: pulseDuration,
+      run: [
+        { type: 'addEdge', id: 'e-agent-you', source: 'person-agent', target: 'person', sourceHandle: 'left-bottom', targetHandle: 'bottom-right', label: notifyLabel() },
+        { type: 'pulse', edge: notifyLabel(), durationMs: pulseDuration },
+      ],
+    },
+    {
+      id: 'confirm',
+      title: '11',
+      message: 'You sign in as usual (Microsoft here) and confirm this agent',
+      actionLabel: 'Confirm',
+      phase: 10,
+      completeAfterMs: pulseDuration,
+      run: [
+        { type: 'addEdge', id: 'e-you-signin', source: 'person', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'left-top', label: 'sign in + Confirm' },
+        { type: 'pulse', edge: 'sign in + Confirm', durationMs: pulseDuration },
+      ],
+    },
+    {
+      id: 'pass',
+      title: '12',
+      message: 'Your sign-in issues a pass: you approved this agent, for this store',
+      actionLabel: 'Issue',
+      phase: 11,
+      completeAfterMs: pulseDuration,
+      run: [
+        { type: 'addEdge', id: 'e-signin-pass', source: 'entity', target: 'person-agent', sourceHandle: 'right-top', targetHandle: 'bottom-right', label: 'pass (person token)' },
+        { type: 'pulse', edge: 'pass (person token)', durationMs: pulseDuration },
+      ],
+    },
     {
       id: 'done',
       title: '',
-      message: 'To finish the purchase, the store needs to know who your agent works for. Next: your sign-in.',
+      message: 'Now your agent can show who it works for. Next: the store asks to see your profile.',
       actionLabel: 'Start over',
-      phase: 6,
+      phase: 12,
       restartOnAction: true,
     },
   ];
@@ -246,8 +324,10 @@ function getProcessFlowSteps() {
 
 // --- Node & edge builders ---
 
+// Saving the layout writes only the nodes on the canvas, so a node hidden at save
+// time (e.g. Your sign-in during scene 1) can be missing from layout.json.
 function makeNode(id, label, extra) {
-  const n = layout.nodes[id];
+  const n = layout.nodes[id] || { x: 336, y: 600, width: 360, height: 230 };
   const data = { label: label };
   if (extra) {
     for (const k in extra) {
@@ -264,7 +344,7 @@ function getNodes() {
     makeNode("agreements", "Agent's home"),
     makeNode("entity-agent", "Service"),
     makeNode("control", "Control", { chrome: false }),
-  ];
+  ].concat(phase >= 6.5 ? [makeNode("entity", "Your sign-in")] : []);
 }
 
 function getEdges() {

@@ -1,7 +1,7 @@
 <Component name="EntityNode">
   <ModalDialog id="entityHelp" title="Your sign-in">
     <Text>
-      Vouches for you: "this person approved this agent." You sign in the usual way (Microsoft here), then confirm the agent. Hellō is the first place you can try it. (Spec term: person server.)
+      Vouches for you: "this person approved this agent." You sign in the usual way (Microsoft here), then confirm the agent. Hellō is the first place you can try it. (Spec term: person server.) The scheduled path, approving later from a link, is inferred from the protocol; the recorded run was interactive.
     </Text>
   </ModalDialog>
   <VStack gap="$space-1" padding="$space-2">
@@ -10,19 +10,11 @@
       <Text fontWeight="bold" fontSize="$fontSize-lg">Your sign-in</Text>
     </HStack>
     <Text fontSize="$fontSize-small" color="$textColor-secondary">vouches for you · Hellō</Text>
-    <Text fontSize="$fontSize-small" fontWeight="bold">Policy Store</Text>
-    <Table data="{kleindorfersTerms}" fontSize="$fontSize-small">
-      <Column bindTo="terms" header="Terms" />
-      <Column header="Policy">
-        <Text>{$item.policy === 'Accept' ? '✅ Accept' : '❌ Reject'}</Text>
-      </Column>
-    </Table>
-    <Text fontSize="$fontSize-small" fontWeight="bold">Data Store</Text>
-    <Table data="{kleindorfersOrgDataStore}" fontSize="$fontSize-small" noDataTemplate="">
-      <Column bindTo="term" header="Agreement" width="2*" />
-      <Column bindTo="counterparty" header="With" />
-      <Column bindTo="timestamp" header="Date" />
-
-    </Table>
+    <VStack gap="$space-1" when="{phase >= 11}">
+      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">Confirm screen</Text>
+      <Text fontSize="$fontSize-small">agent judell · local@judell.github.io</Text>
+      <Text fontSize="$fontSize-small">code HBHK-S3ZN · new agent</Text>
+      <Text fontSize="$fontSize-small" fontWeight="bold">confirmed by Jon</Text>
+    </VStack>
   </VStack>
 </Component>

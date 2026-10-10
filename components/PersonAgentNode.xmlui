@@ -19,5 +19,13 @@
       <Text fontSize="$fontSize-small">signed with key 2026-10-09_0af</Text>
       <Text fontSize="$fontSize-small">expires in 1 hour</Text>
     </VStack>
+    <VStack gap="$space-1" when="{phase >= 12}">
+      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">pass from your sign-in</Text>
+      <Text fontSize="$fontSize-small">for whoami.aauth.dev</Text>
+      <Text fontSize="$fontSize-small">you approved (Jon, via Hellō)</Text>
+      <Text fontSize="$fontSize-small">this agent</Text>
+      <Text fontSize="$fontSize-small">tied to the same key</Text>
+      <Text fontSize="$fontSize-small">about 54 min</Text>
+    </VStack>
   </VStack>
 </Component>
