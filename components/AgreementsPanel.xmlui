@@ -11,8 +11,8 @@
         name="info"
         tooltip="About Agent's home"
         aria-label="About Agent's home"
-        width="14px"
-        height="14px"
+        width="18px"
+        height="18px"
         color="$color-primary"
         cursor="pointer"
         onClick="homeHelp.open()" />

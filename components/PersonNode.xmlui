@@ -16,8 +16,8 @@
         name="info"
         tooltip="About You"
         aria-label="About You"
-        width="14px"
-        height="14px"
+        width="18px"
+        height="18px"
         color="$color-primary"
         cursor="pointer"
         onClick="personHelp.open()" />

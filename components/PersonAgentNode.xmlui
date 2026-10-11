@@ -12,8 +12,8 @@
         name="info"
         tooltip="About Your agent"
         aria-label="About Your agent"
-        width="14px"
-        height="14px"
+        width="18px"
+        height="18px"
         color="$color-primary"
         cursor="pointer"
         onClick="paHelp.open()" />

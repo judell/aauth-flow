@@ -12,8 +12,8 @@
         name="info"
         tooltip="About Your sign-in"
         aria-label="About Your sign-in"
-        width="14px"
-        height="14px"
+        width="18px"
+        height="18px"
         color="$color-primary"
         cursor="pointer"
         onClick="entityHelp.open()" />

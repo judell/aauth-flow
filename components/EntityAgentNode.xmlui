@@ -10,8 +10,8 @@
         name="info"
         tooltip="About Service"
         aria-label="About Service"
-        width="14px"
-        height="14px"
+        width="18px"
+        height="18px"
         color="$color-primary"
         cursor="pointer"
         onClick="eaHelp.open()" />
