@@ -23,9 +23,9 @@
     <Button
       label="Confirm"
       enabled="{!running}"
-      when="{phase === 10}"
+      when="{phase === 9}"
       onClick="nextStep()" />
-    <VStack gap="$space-1" when="{phase >= 11}">
+    <VStack gap="$space-1" when="{phase >= 10}">
       <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">Confirm screen</Text>
       <Text fontSize="$fontSize-small">agent judell · local@judell.github.io</Text>
       <Text fontSize="$fontSize-small">code HBHK-S3ZN · new agent</Text>

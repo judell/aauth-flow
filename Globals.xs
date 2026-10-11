@@ -144,7 +144,7 @@ function startBuy(kind) {
   if (stepIndex !== 0 || running) return;
   trigger = kind;
   const scheduled = kind === 'scheduled';
-  const label = scheduled ? 'schedule fires: buy' : 'buy';
+  const label = scheduled ? '1. schedule fires: buy' : '1. buy';
   buttonEnabled = false;
   running = true;
   const api = window.__reactFlowCanvasApi;
@@ -163,7 +163,7 @@ function sceneEdgeIds() {
 }
 
 function notifyLabel() {
-  return trigger === 'scheduled' ? 'notification: approve · HBHK-S3ZN' : 'approve here · HBHK-S3ZN';
+  return trigger === 'scheduled' ? '9. notification: approve · HBHK-S3ZN' : '9. approve here · HBHK-S3ZN';
 }
 
 function getProcessFlowSteps() {
@@ -186,8 +186,8 @@ function getProcessFlowSteps() {
       phase: 1,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-agent-home', source: 'person-agent', target: 'agreements', sourceHandle: 'top-left', targetHandle: 'bottom-left', label: 'asks for ID card' },
-        { type: 'pulse', edge: 'asks for ID card', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-agent-home', source: 'person-agent', target: 'agreements', sourceHandle: 'top-left', targetHandle: 'bottom-left', label: '2. asks for ID card' },
+        { type: 'pulse', edge: '2. asks for ID card', durationMs: pulseDuration },
       ],
     },
     {
@@ -198,8 +198,8 @@ function getProcessFlowSteps() {
       phase: 2,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-home-agent', source: 'agreements', target: 'person-agent', sourceHandle: 'bottom-right', targetHandle: 'top-right', label: 'issues ID card' },
-        { type: 'pulse', edge: 'issues ID card', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-home-agent', source: 'agreements', target: 'person-agent', sourceHandle: 'bottom-right', targetHandle: 'top-right', label: '3. issues ID card' },
+        { type: 'pulse', edge: '3. issues ID card', durationMs: pulseDuration },
       ],
     },
     {
@@ -210,8 +210,8 @@ function getProcessFlowSteps() {
       phase: 3,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-agent-svc', source: 'person-agent', target: 'entity-agent', sourceHandle: 'right-top', targetHandle: 'left-top', label: 'buy request + ID card' },
-        { type: 'pulse', edge: 'buy request + ID card', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-agent-svc', source: 'person-agent', target: 'entity-agent', sourceHandle: 'right-top', targetHandle: 'left-top', label: '4. buy request + ID card' },
+        { type: 'pulse', edge: '4. buy request + ID card', durationMs: pulseDuration },
       ],
     },
     {
@@ -222,8 +222,8 @@ function getProcessFlowSteps() {
       phase: 4,
       completeAfterRoundTrip: true,
       run: [
-        { type: 'addEdge', id: 'e-svc-home', source: 'entity-agent', target: 'agreements', sourceHandle: 'top-left', targetHandle: 'right-bottom', label: 'checks card' },
-        { type: 'pulseRoundTrip', edge: 'checks card', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-svc-home', source: 'entity-agent', target: 'agreements', sourceHandle: 'top-left', targetHandle: 'right-bottom', label: '5. checks card' },
+        { type: 'pulseRoundTrip', edge: '5. checks card', durationMs: pulseDuration },
       ],
     },
     {
@@ -234,53 +234,45 @@ function getProcessFlowSteps() {
       phase: 5,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-svc-agent', source: 'entity-agent', target: 'person-agent', sourceHandle: 'left-bottom', targetHandle: 'right-bottom', label: '401 · who for?' },
-        { type: 'pulse', edge: '401 · who for?', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-svc-agent', source: 'entity-agent', target: 'person-agent', sourceHandle: 'left-bottom', targetHandle: 'right-bottom', label: '6. 401 · who for?' },
+        { type: 'pulse', edge: '6. 401 · who for?', durationMs: pulseDuration },
       ],
     },
     // --- Scene 2: who is your agent working for? (walkthrough-2 round A) ---
     {
-      id: 'signin',
+      id: 'vouch',
       title: '7',
-      message: 'The store needs to know who your agent works for, so your agent turns to your sign-in',
-      actionLabel: 'Continue',
+      message: 'The store needs to know who your agent works for, so your agent asks your sign-in to vouch for its person',
+      actionLabel: 'Ask',
       phase: 6,
       runningPhase: 6.5,
       completeAfterMs: pulseDuration,
       // Your sign-in's "not involved yet" line clears at phase >= 6.5 (EntityNode)
-    },
-    {
-      id: 'vouch',
-      title: '8',
-      message: 'Your agent asks your sign-in to vouch for its person, for this store',
-      actionLabel: 'Ask',
-      phase: 7,
-      completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-agent-signin', source: 'person-agent', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'top-left', label: 'vouch for my person?' },
-        { type: 'pulse', edge: 'vouch for my person?', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-agent-signin', source: 'person-agent', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'top-left', label: '7. vouch for my person?' },
+        { type: 'pulse', edge: '7. vouch for my person?', durationMs: pulseDuration },
       ],
     },
     {
       id: 'reply',
-      title: '9',
+      title: '8',
       message: 'Your sign-in says a person must approve, and hands back a code',
       actionLabel: 'Reply',
-      phase: 8,
+      phase: 7,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-signin-agent', source: 'entity', target: 'person-agent', sourceHandle: 'top-right', targetHandle: 'bottom-right', label: '202 · approve · HBHK-S3ZN' },
-        { type: 'pulse', edge: '202 · approve · HBHK-S3ZN', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-signin-agent', source: 'entity', target: 'person-agent', sourceHandle: 'top-right', targetHandle: 'bottom-right', label: '8. 202 · approve · HBHK-S3ZN' },
+        { type: 'pulse', edge: '8. 202 · approve · HBHK-S3ZN', durationMs: pulseDuration },
       ],
     },
     {
       id: 'notify',
-      title: '10',
+      title: '9',
       message: trigger === 'scheduled'
         ? 'Nobody is at the keyboard, so your agent sends you a link to approve within 10 minutes'
         : 'Your agent shows you where to approve',
       actionLabel: 'Notify',
-      phase: 9,
+      phase: 8,
       completeAfterMs: pulseDuration,
       run: [
         { type: 'addEdge', id: 'e-agent-you', source: 'person-agent', target: 'person', sourceHandle: 'left-bottom', targetHandle: 'bottom-right', label: notifyLabel() },
@@ -289,28 +281,28 @@ function getProcessFlowSteps() {
     },
     {
       id: 'confirm',
-      title: '11',
+      title: '10',
       message: 'You sign in as usual (Microsoft here) and confirm this agent (click Confirm in Your sign-in)',
       actionLabel: '',
       actionEnabled: false,
-      phase: 10,
+      phase: 9,
       // Started by the Confirm button in EntityNode, not by the control button
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-you-signin', source: 'person', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'left-top', label: 'sign in + Confirm' },
-        { type: 'pulse', edge: 'sign in + Confirm', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-you-signin', source: 'person', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'left-top', label: '10. sign in + Confirm' },
+        { type: 'pulse', edge: '10. sign in + Confirm', durationMs: pulseDuration },
       ],
     },
     {
       id: 'pass',
-      title: '12',
+      title: '11',
       message: 'Your sign-in issues a pass: you approved this agent, for this store',
       actionLabel: 'Issue',
-      phase: 11,
+      phase: 10,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-signin-pass', source: 'entity', target: 'person-agent', sourceHandle: 'right-top', targetHandle: 'bottom-right', label: 'pass (person token)' },
-        { type: 'pulse', edge: 'pass (person token)', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-signin-pass', source: 'entity', target: 'person-agent', sourceHandle: 'right-top', targetHandle: 'bottom-right', label: '11. pass (person token)' },
+        { type: 'pulse', edge: '11. pass (person token)', durationMs: pulseDuration },
       ],
     },
     {
@@ -318,7 +310,7 @@ function getProcessFlowSteps() {
       title: '',
       message: 'Now your agent can show who it works for. Next: the store asks to see your profile.',
       actionLabel: 'Start over',
-      phase: 12,
+      phase: 11,
       restartOnAction: true,
     },
   ];

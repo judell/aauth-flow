@@ -28,7 +28,7 @@
         label="Buy"
         enabled="{stepIndex === 0 && !running}"
         onClick="startBuy('interactive')" />
-      <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 10 && trigger === 'interactive'}">
+      <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 9 && trigger === 'interactive'}">
         approve: code HBHK-S3ZN · on screen now
       </Text>
     </VStack>
@@ -46,7 +46,7 @@
           onClick="startBuy('scheduled')" />
         <Text fontSize="$fontSize-small">weekly reorder</Text>
       </HStack>
-      <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 10 && trigger === 'scheduled'}">
+      <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 9 && trigger === 'scheduled'}">
         approve: code HBHK-S3ZN · on your phone, within 10 min
       </Text>
     </VStack>
