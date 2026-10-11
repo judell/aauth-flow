@@ -139,19 +139,77 @@ function onPulseSequenceComplete() {
   }
 }
 
+// Draws step 1's arrow (You -> Your agent) for the given path; returns its label
+function addTriggerEdge(kind) {
+  const scheduled = kind === 'scheduled';
+  const label = scheduled ? '1. schedule fires: buy' : '1. buy';
+  window.__reactFlowCanvasApi.addEdge('e-you-agent', 'person', 'person-agent',
+    scheduled ? 'right-bottom' : 'right-top',
+    scheduled ? 'left-bottom' : 'left-top', label);
+  return label;
+}
+
 // Node-driven start: the Buy button or the schedule icon in PersonNode
 function startBuy(kind) {
   if (stepIndex !== 0 || running) return;
   trigger = kind;
-  const scheduled = kind === 'scheduled';
-  const label = scheduled ? '1. schedule fires: buy' : '1. buy';
   buttonEnabled = false;
   running = true;
+  const label = addTriggerEdge(kind);
+  window.__reactFlowCanvasApi.pulseEdge(label, pulseDuration);
+}
+
+// --- Step URL: ?step=N[&path=scheduled] ---
+
+// Query string for the current step (written to the URL by ReactFlowPage).
+// A string, because the vendored XMLUI 0.12.15 navigate() ignores the
+// { queryParams, replace } options that 0.14 documents.
+function stepQueryString() {
+  const steps = getProcessFlowSteps();
+  const step = steps[stepIndex];
+  return 'step=' + (step.title || 'end') + (trigger === 'scheduled' ? '&path=scheduled' : '');
+}
+
+// The same string for a step and path read from the URL, for comparison
+function urlStepString(step, path) {
+  return 'step=' + step + (path === 'scheduled' ? '&path=scheduled' : '');
+}
+
+// Arrive at step n (1-based, or 'end') with every earlier step already done:
+// earlier arrows drawn without pulsing; phase gates reveal the node contents
+function jumpToStep(n, path) {
+  const kind = path === 'scheduled' ? 'scheduled' : 'interactive';
+  const steps = getProcessFlowSteps();
+  const target = n === 'end' ? steps.length - 1 : Math.min(Math.max(Number(n) - 1, 0), steps.length - 1);
+  if (!(target >= 0)) return;
   const api = window.__reactFlowCanvasApi;
-  api.addEdge('e-you-agent', 'person', 'person-agent',
-    scheduled ? 'right-bottom' : 'right-top',
-    scheduled ? 'left-bottom' : 'left-top', label);
-  api.pulseEdge(label, pulseDuration);
+  api.clearPulse();
+  const ids = sceneEdgeIds();
+  for (let i = 0; i < ids.length; i++) {
+    api.removeEdge(ids[i]);
+  }
+  running = false;
+  if (target === 0) {
+    // step=1: back to the start, nothing drawn yet
+    trigger = '';
+    applyStep(0);
+    return;
+  }
+  trigger = kind;
+  addTriggerEdge(kind);
+  for (let i = 1; i < target; i++) {
+    const effects = steps[i].run || [];
+    for (let j = 0; j < effects.length; j++) {
+      const e = effects[j];
+      if (e.type === 'addEdge') {
+        const label = e.id === 'e-agent-you' ? notifyLabelFor(kind) : e.label;
+        api.addEdge(e.id, e.source, e.target, e.sourceHandle, e.targetHandle, label, e.noArrow, e.data);
+      }
+    }
+  }
+  running = false;
+  pulse = { active: false, edges: [], step: -1, currentEdge: '' };
+  applyStep(target);
 }
 
 // --- Step declarations ---
@@ -163,7 +221,11 @@ function sceneEdgeIds() {
 }
 
 function notifyLabel() {
-  return trigger === 'scheduled' ? '9. notification: approve · HBHK-S3ZN' : '9. approve here · HBHK-S3ZN';
+  return notifyLabelFor(trigger);
+}
+
+function notifyLabelFor(kind) {
+  return kind === 'scheduled' ? '9. notification: approve · HBHK-S3ZN' : '9. approve here · HBHK-S3ZN';
 }
 
 function getProcessFlowSteps() {

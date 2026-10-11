@@ -1,4 +1,4 @@
-<Component name="ReactFlowPage" var.edgeLabel="" var.edgeId="">
+<Component name="ReactFlowPage" var.edgeLabel="" var.edgeId="" var.urlReady="{false}">
   <ModalDialog id="edgeInfoDialog" title="{edgeLabel}">
     <VStack gap="$space-2">
       <Text>
@@ -14,6 +14,25 @@
     id="layoutData"
     url="layout.json"
     onLoaded="{(data) => { layout = data }}" />
+
+  <!-- Step URL: on load, jump to ?step=N[&path=scheduled]; then keep the URL in sync.
+       urlReady holds off URL writes until the load-time jump has read the query. -->
+  <Timer
+    enabled="{layout !== null}"
+    once="true"
+    initialDelay="{300}"
+    onTick="{() => { if ($queryParams.step) { jumpToStep($queryParams.step, $queryParams.path) } urlReady = true }}" />
+
+  <!-- A URL typed into an open tab changes only the hash (no reload): jump when the
+       query names a different step from the one on screen. Our own URL writes match
+       stepQueryString(), so they don't re-trigger. -->
+  <ChangeListener
+    listenTo="{($queryParams.step || '') + '|' + ($queryParams.path || '')}"
+    onDidChange="{() => { if (urlReady && $queryParams.step && urlStepString($queryParams.step, $queryParams.path) !== stepQueryString()) { jumpToStep($queryParams.step, $queryParams.path) } }}" />
+
+  <ChangeListener
+    listenTo="{stepIndex}"
+    onDidChange="{() => { if (urlReady) { navigate($pathname + '?' + stepQueryString()) } }}" />
 
   <!-- Step machine completion triggers -->
 
