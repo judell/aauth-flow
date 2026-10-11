@@ -247,7 +247,7 @@ function getProcessFlowSteps() {
       phase: 6,
       runningPhase: 6.5,
       completeAfterMs: pulseDuration,
-      // Your sign-in joins the canvas at phase >= 6.5 (getNodes)
+      // Your sign-in's "not involved yet" line clears at phase >= 6.5 (EntityNode)
     },
     {
       id: 'vouch',
@@ -344,7 +344,9 @@ function getNodes() {
     makeNode("agreements", "Agent's home"),
     makeNode("entity-agent", "Service"),
     makeNode("control", "Control", { chrome: false }),
-  ].concat(phase >= 6.5 ? [makeNode("entity", "Your sign-in")] : []);
+    // Last: pairs by order with <EntityNode />, the canvas's last child
+    makeNode("entity", "Your sign-in"),
+  ];
 }
 
 function getEdges() {
