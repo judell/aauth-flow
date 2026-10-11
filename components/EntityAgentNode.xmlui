@@ -1,6 +1,6 @@
 <Component name="EntityAgentNode">
   <ModalDialog id="eaHelp" title="Resource (the store)">
-    <Text>The Resource (spec term): the server the agent calls. Here it's a test service that echoes who's calling; imagine a store.</Text>
+    <Text>The Resource (spec term): the server the agent calls. Here it's a test service that echoes who's calling; imagine a store. It checks the agent's ID against the Agent Provider's published key, learns who the agent works for only as a private ID from the Person Server, and needs separate permission (an auth token) to complete a purchase.</Text>
   </ModalDialog>
   <VStack gap="$space-1" padding="$space-2">
     <HStack verticalAlignment="center" horizontalAlignment="center" gap="$space-2">
@@ -18,10 +18,22 @@
     </HStack>
     <Text fontSize="$fontSize-small" color="$textColor-secondary">whoami.aauth.dev, standing in for a store</Text>
     <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary" when="{phase >= 5}">
-      caller: aauth:local@judell.github.io
+      agent: aauth:local@judell.github.io
     </Text>
-    <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 6}">
+    <Text fontSize="$fontSize-small" fontWeight="bold" when="{(phase >= 6 && phase < 13) || phase >= 18}">
       still needs: who it's buying for
+    </Text>
+    <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary" when="{phase >= 13 && phase <= 17}">
+      buying for: sub_8AXHIku67… (via Hellō)
+    </Text>
+    <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 14 && phase < 17}">
+      still needs: permission
+    </Text>
+    <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-success" when="{phase === 17}">
+      purchase: done ✓
+    </Text>
+    <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 21}">
+      purchase: waiting for you
     </Text>
   </VStack>
 </Component>

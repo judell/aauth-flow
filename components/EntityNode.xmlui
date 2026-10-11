@@ -1,7 +1,7 @@
 <Component name="EntityNode">
   <ModalDialog id="entityHelp" title="Person Server (your sign-in)">
     <Text>
-      Vouches for you: "this person approved this agent." You sign in the usual way (Microsoft here), then confirm the agent. Hellō is the first place you can try it. (Spec term: person server.) The scheduled path, approving later from a link, is inferred from the protocol; the recorded run was interactive.
+      Vouches for you: it tells the store "this agent acts for this person", using a private ID that's different at every store. You sign in the usual way (Microsoft here), then confirm the agent. Per the spec (§7.4), the confirm screen shows the store's own words (its name and description) separately from the agent's. That's what this screen shows; whether Hellō's real screen named the store wasn't captured. Act 2's outcomes (approval given in advance as a mission, a phone notification, or "can't reach you") follow the spec but weren't observed in our run. Hellō is the first place you can try it. (Spec term: person server.)
     </Text>
   </ModalDialog>
   <VStack gap="$space-1" padding="$space-2">
@@ -20,16 +20,25 @@
     </HStack>
     <Text fontSize="$fontSize-small" color="$textColor-secondary">vouches for you · Hellō</Text>
     <Text fontSize="$fontSize-small" color="$textColor-secondary" when="{phase < 6.5}">not involved yet</Text>
-    <VStack gap="$space-1" when="{phase >= 10}">
-      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">Confirm screen</Text>
-      <Text fontSize="$fontSize-small">agent judell · local@judell.github.io</Text>
-      <Text fontSize="$fontSize-small">code HBHK-S3ZN · new agent</Text>
+    <VStack gap="$space-1" when="{phase >= 10 && phase <= 17 && outcome !== 'mission'}">
+      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">Let this agent act for you at this store?</Text>
+      <Text fontSize="$fontSize-small">store: AAuth Who Am I (whoami.aauth.dev)</Text>
+      <Text fontSize="$fontSize-small" color="$textColor-secondary">asking: agent judell · local@judell.github.io</Text>
+      <Text fontSize="$fontSize-small" color="$textColor-secondary">code HBHK-S3ZN · new agent</Text>
       <Button
         label="Confirm"
         enabled="{!running}"
         when="{phase === 10}"
         onClick="nextStep()" />
-      <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 11}">confirmed by Jon</Text>
+      <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 11}">confirmed by Jon: this agent, this store</Text>
     </VStack>
+    <VStack gap="$space-1" when="{outcome === 'mission' && phase >= 11}">
+      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">standing approval (mission)</Text>
+      <Text fontSize="$fontSize-small">weekly reorder at this store</Text>
+      <Text fontSize="$fontSize-small" color="$textColor-secondary">approved by Jon last week</Text>
+    </VStack>
+    <Text fontSize="$fontSize-small" fontWeight="bold" when="{outcome === 'neither' && phase >= 21}">
+      couldn't reach the Person (user_unreachable)
+    </Text>
   </VStack>
 </Component>

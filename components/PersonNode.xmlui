@@ -1,7 +1,7 @@
 <Component name="PersonNode">
   <ModalDialog id="personHelp" title="Person (you)">
     <Text>
-      The Person (spec term): the one the agent acts for, and who is accountable for its actions. You start things: by acting yourself, or by setting up a schedule that acts for you.
+      The Person (spec term): the one the agent acts for, and who is accountable for its actions. Act 1 shows what happens when you're there (Buy). Act 2 shows what happens when you're not: a weekly reorder fires at 3 a.m., and the Person Server either uses approval you gave earlier, reaches you on your phone, or reports it can't reach you. Act 2's outcomes follow the spec; they weren't observed in our run.
     </Text>
   </ModalDialog>
   <VStack
@@ -23,12 +23,12 @@
         onClick="personHelp.open()" />
     </HStack>
     <VStack gap="$space-1" height="*" verticalAlignment="center" horizontalAlignment="center">
-      <Text fontSize="$fontSize-small" color="$textColor-secondary">Interactive</Text>
+      <Text fontSize="$fontSize-small" color="$textColor-secondary">Act 1: you're there</Text>
       <Button
         label="Buy"
         enabled="{stepIndex === 0 && !running}"
         onClick="startBuy('interactive')" />
-      <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 9 && trigger === 'interactive'}">
+      <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 9 && phase <= 17 && trigger === 'interactive'}">
         approve: code HBHK-S3ZN · on screen now
       </Text>
       <Button
@@ -39,25 +39,30 @@
     </VStack>
     <ContentSeparator />
     <VStack gap="$space-1" height="*" verticalAlignment="center" horizontalAlignment="center">
-      <Text fontSize="$fontSize-small" color="$textColor-secondary">Scheduled</Text>
+      <Text fontSize="$fontSize-small" color="$textColor-secondary">Act 2: you're not</Text>
       <HStack verticalAlignment="center" gap="$space-2">
         <Icon
           name="calendar-clock"
-          tooltip="Fire the schedule"
-          aria-label="Fire the schedule"
+          tooltip="Fire the weekly reorder (3 a.m.)"
+          aria-label="Fire the weekly reorder (3 a.m.)"
           width="24px"
           height="24px"
           cursor="pointer"
           onClick="startBuy('scheduled')" />
-        <Text fontSize="$fontSize-small">weekly reorder</Text>
+        <Text fontSize="$fontSize-small">weekly reorder, 3 a.m.</Text>
       </HStack>
-      <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 9 && trigger === 'scheduled'}">
-        approve: code HBHK-S3ZN · on your phone, within 10 min
+      <VStack gap="$space-1" when="{phase === 18}">
+        <Button label="I approved this last week" enabled="{!running}" onClick="chooseOutcome('mission')" />
+        <Button label="Ask me on my phone" enabled="{!running}" onClick="chooseOutcome('ask')" />
+        <Button label="Neither" enabled="{!running}" onClick="chooseOutcome('neither')" />
+      </VStack>
+      <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 9 && phase <= 17 && trigger === 'scheduled' && outcome === 'ask'}">
+        notification: approve the weekly reorder? · code HBHK-S3ZN
       </Text>
       <Button
         label="Open link"
         enabled="{!running}"
-        when="{phase === 9 && trigger === 'scheduled'}"
+        when="{phase === 9 && trigger === 'scheduled' && outcome === 'ask'}"
         onClick="nextStep()" />
     </VStack>
   </VStack>

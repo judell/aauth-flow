@@ -1,7 +1,7 @@
 <Component name="PersonAgentNode">
   <ModalDialog id="paHelp" title="Agent (your assistant)">
     <Text>
-      An AI agent with its own identity. It signs every request with a key that never leaves this machine, so there's no API key or bearer token to leak. It carries an agent token (its signed ID) from its Agent Provider, and later a person token (proof that you approved it) from its Person Server.
+      An AI agent with its own identity. It signs every request with a key that never leaves this machine, so there's no API key or bearer token to leak. It carries an agent token (its signed ID) from its Agent Provider. Its Person Server then vouches for its Person with a person token, which identifies but doesn't authorize: the store learns "the same person as last time", not who you are, unless you agree to share your profile. Permission for a purchase comes separately, as an auth token.
     </Text>
   </ModalDialog>
   <VStack gap="$space-1" padding="$space-2">
@@ -25,16 +25,22 @@
       <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">agent token (its signed ID)</Text>
       <Text fontSize="$fontSize-small">ID aauth:local@judell.github.io</Text>
       <Text fontSize="$fontSize-small">Agent Provider judell.github.io</Text>
+      <Text fontSize="$fontSize-small">Person Server person.hello.coop (ps)</Text>
       <Text fontSize="$fontSize-small">signed with key 2026-10-09_0af</Text>
       <Text fontSize="$fontSize-small">expires in 1 hour</Text>
     </VStack>
-    <VStack gap="$space-1" when="{phase >= 12}">
-      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">person token (you approved this agent)</Text>
-      <Text fontSize="$fontSize-small">for whoami.aauth.dev</Text>
-      <Text fontSize="$fontSize-small">you approved (Jon, via Hellō)</Text>
-      <Text fontSize="$fontSize-small">this agent</Text>
+    <VStack gap="$space-1" when="{phase >= 12 && phase <= 17}">
+      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">person token (vouches for you, privately)</Text>
+      <Text fontSize="$fontSize-small">for whoami.aauth.dev only</Text>
+      <Text fontSize="$fontSize-small">you, as sub_8AXHIku67… (different at every store)</Text>
+      <Text fontSize="$fontSize-small">vouched for by Hellō</Text>
+      <Text fontSize="$fontSize-small" color="$textColor-secondary">no name unless you agree</Text>
+    </VStack>
+    <VStack gap="$space-1" when="{phase >= 16 && phase <= 17}">
+      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">auth token (permission for this purchase)</Text>
+      <Text fontSize="$fontSize-small">for whoami.aauth.dev only</Text>
       <Text fontSize="$fontSize-small">tied to the same key</Text>
-      <Text fontSize="$fontSize-small">about 54 min</Text>
+      <Text fontSize="$fontSize-small" color="$textColor-secondary">here also your name and email, because you agreed to share them</Text>
     </VStack>
   </VStack>
 </Component>

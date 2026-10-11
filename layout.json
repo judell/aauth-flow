@@ -1,28 +1,28 @@
 {
   "nodes": {
     "person": {
-      "x": -96,
+      "x": -240,
       "y": -112,
-      "width": 300,
-      "height": 330
+      "width": 428,
+      "height": 570
     },
     "person-agent": {
-      "x": 464,
-      "y": -16,
-      "width": 320,
-      "height": 420
+      "x": 480,
+      "y": 96,
+      "width": 384,
+      "height": 388
     },
     "agreements": {
-      "x": 256,
-      "y": -352,
+      "x": 384,
+      "y": -304,
       "width": 484,
       "height": 198
     },
     "entity-agent": {
-      "x": 960,
-      "y": -176,
-      "width": 340,
-      "height": 200
+      "x": 1232,
+      "y": 80,
+      "width": 516,
+      "height": 280
     },
     "control": {
       "x": 400,
@@ -31,10 +31,10 @@
       "height": 82
     },
     "entity": {
-      "x": -64,
-      "y": 560,
-      "width": 360,
-      "height": 230
+      "x": -32,
+      "y": 672,
+      "width": 696,
+      "height": 390
     }
   }
 }

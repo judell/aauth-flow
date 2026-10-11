@@ -1,7 +1,7 @@
 <Component name="AgreementsPanel">
   <ModalDialog id="homeHelp" title="Agent Provider (the agent's home)">
     <Text>
-      Vouches for the agent, the way an email domain vouches for the name before the @. The agent's ID, aauth:local@judell.github.io, names its home, which publishes the agent's public profile (aauth-agent.json) and key (jwks.json). In the real world, the home is the company that runs your assistant; in this demo, it's Jon's own GitHub site. (Spec term: agent provider.)
+      Vouches for the agent, the way an email domain vouches for the name before the @. The agent's ID, aauth:local@judell.github.io, names its home, which publishes the agent's public profile (aauth-agent.json) and key (jwks.json). In the real world, the home is the company that runs your assistant; in this demo, it's Jon's own GitHub site. That's the spec's self-hosted case: "A self-hosted agent is its own agent provider", so the agent token is signed on Jon's machine with the provider's key. (Spec term: agent provider.)
     </Text>
   </ModalDialog>
   <VStack gap="$space-1" padding="$space-2">

@@ -21,14 +21,14 @@
     enabled="{layout !== null}"
     once="true"
     initialDelay="{300}"
-    onTick="{() => { if ($queryParams.step) { jumpToStep($queryParams.step, $queryParams.path) } urlReady = true }}" />
+    onTick="{() => { if ($queryParams.step) { jumpToStep($queryParams.step, $queryParams.path, $queryParams.outcome) } urlReady = true }}" />
 
   <!-- A URL typed into an open tab changes only the hash (no reload): jump when the
        query names a different step from the one on screen. Our own URL writes match
        stepQueryString(), so they don't re-trigger. -->
   <ChangeListener
-    listenTo="{($queryParams.step || '') + '|' + ($queryParams.path || '')}"
-    onDidChange="{() => { if (urlReady && $queryParams.step && urlStepString($queryParams.step, $queryParams.path) !== stepQueryString()) { jumpToStep($queryParams.step, $queryParams.path) } }}" />
+    listenTo="{($queryParams.step || '') + '|' + ($queryParams.path || '') + '|' + ($queryParams.outcome || '')}"
+    onDidChange="{() => { if (urlReady && $queryParams.step && urlStepString($queryParams.step, $queryParams.path, $queryParams.outcome) !== stepQueryString()) { jumpToStep($queryParams.step, $queryParams.path, $queryParams.outcome) } }}" />
 
   <ChangeListener
     listenTo="{stepIndex}"
@@ -74,7 +74,7 @@
       showControls="{true}"
       showBackground="{true}"
       onEdgeInfoClick="{(e) => { edgeLabel = e.label; edgeId = e.edgeId; edgeInfoDialog.open() }}"
-      nodes="{(phase, phaseLabel, phaseMessage, buttonLabel, buttonEnabled, running, stepIndex, pulse.active, pulse.currentEdge, trigger, getNodes())}"
+      nodes="{(phase, phaseLabel, phaseMessage, buttonLabel, buttonEnabled, running, stepIndex, pulse.active, pulse.currentEdge, trigger, outcome, getNodes())}"
       edges="{getEdges()}">
       <PersonNode />
       <PersonAgentNode />
