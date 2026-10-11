@@ -171,7 +171,7 @@ function getProcessFlowSteps() {
     {
       id: 'trigger',
       title: '1',
-      message: 'You buy something, or a schedule does it for you',
+      message: 'You buy something, or a schedule does it for you (click Buy to start)',
       actionLabel: '',
       actionEnabled: false,
       phase: 0,
@@ -290,9 +290,11 @@ function getProcessFlowSteps() {
     {
       id: 'confirm',
       title: '11',
-      message: 'You sign in as usual (Microsoft here) and confirm this agent',
-      actionLabel: 'Confirm',
+      message: 'You sign in as usual (Microsoft here) and confirm this agent (click Confirm in Your sign-in)',
+      actionLabel: '',
+      actionEnabled: false,
       phase: 10,
+      // Started by the Confirm button in EntityNode, not by the control button
       completeAfterMs: pulseDuration,
       run: [
         { type: 'addEdge', id: 'e-you-signin', source: 'person', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'left-top', label: 'sign in + Confirm' },

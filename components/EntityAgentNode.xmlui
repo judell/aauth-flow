@@ -6,6 +6,15 @@
     <HStack verticalAlignment="center" horizontalAlignment="center" gap="$space-2">
       <Icon name="bot" width="24px" height="24px" />
       <Text fontWeight="bold" fontSize="$fontSize-lg">Service</Text>
+      <Icon
+        name="info"
+        tooltip="About Service"
+        aria-label="About Service"
+        width="14px"
+        height="14px"
+        color="$color-primary"
+        cursor="pointer"
+        onClick="eaHelp.open()" />
     </HStack>
     <Text fontSize="$fontSize-small" color="$textColor-secondary">whoami.aauth.dev · standing in for a store</Text>
     <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary" when="{phase >= 5}">

@@ -8,6 +8,15 @@
     <HStack verticalAlignment="center" horizontalAlignment="center" gap="$space-2">
       <Icon name="bot" width="24px" height="24px" />
       <Text fontWeight="bold" fontSize="$fontSize-lg">Your agent</Text>
+      <Icon
+        name="info"
+        tooltip="About Your agent"
+        aria-label="About Your agent"
+        width="14px"
+        height="14px"
+        color="$color-primary"
+        cursor="pointer"
+        onClick="paHelp.open()" />
     </HStack>
     <Text fontSize="$fontSize-small" color="$textColor-secondary" when="{phase < 3}">
       no ID card yet

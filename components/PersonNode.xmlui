@@ -4,12 +4,25 @@
       The person the agent acts for. You start things: by acting yourself, or by setting up a schedule that acts for you.
     </Text>
   </ModalDialog>
-  <VStack gap="$space-1" padding="$space-2">
+  <VStack
+    gap="$space-1"
+    padding="$space-2"
+    height="100%"
+    horizontalAlignment="center">
     <HStack horizontalAlignment="center" verticalAlignment="center" gap="$space-2">
       <Icon name="person" width="24px" height="24px" />
       <Text fontWeight="bold" fontSize="$fontSize-lg">You</Text>
+      <Icon
+        name="info"
+        tooltip="About You"
+        aria-label="About You"
+        width="14px"
+        height="14px"
+        color="$color-primary"
+        cursor="pointer"
+        onClick="personHelp.open()" />
     </HStack>
-    <VStack gap="$space-1">
+    <VStack gap="$space-1" height="*" verticalAlignment="center" horizontalAlignment="center">
       <Text fontSize="$fontSize-small" color="$textColor-secondary">Interactive</Text>
       <Button
         label="Buy"
@@ -20,7 +33,7 @@
       </Text>
     </VStack>
     <ContentSeparator />
-    <VStack gap="$space-1">
+    <VStack gap="$space-1" height="*" verticalAlignment="center" horizontalAlignment="center">
       <Text fontSize="$fontSize-small" color="$textColor-secondary">Scheduled</Text>
       <HStack verticalAlignment="center" gap="$space-2">
         <Icon

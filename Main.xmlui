@@ -4,7 +4,7 @@
   global.trigger="{''}"
   global.phase="{0}"
   global.phaseLabel="{'1'}"
-  global.phaseMessage="{'You buy something, or a schedule does it for you'}"
+  global.phaseMessage="{'You buy something, or a schedule does it for you (click Buy to start)'}"
   global.buttonLabel="{''}"
   global.buttonEnabled="{false}"
   global.pulseDuration="{1800}"
