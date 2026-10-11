@@ -365,7 +365,7 @@ function getProcessFlowSteps() {
       completeAfterMs: pulseDuration,
       // Branches: interactive -> approvehere; scheduled -> choose (nextIndex)
       run: [
-        { type: 'addEdge', id: 'e-signin-agent', source: 'entity', target: 'person-agent', sourceHandle: 'top-right', targetHandle: 'bottom-right', label: '5. needs your OK', data: lp(30) },
+        { type: 'addEdge', id: 'e-signin-agent', source: 'entity', target: 'person-agent', sourceHandle: 'right-top', targetHandle: 'bottom-right', label: '5. needs your OK', data: lp(30) },
         { type: 'pulse', edge: '5. needs your OK', durationMs: pulseDuration },
       ],
     },
@@ -416,7 +416,7 @@ function getProcessFlowSteps() {
       phase: 11,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-signin-vouch', source: 'entity', target: 'person-agent', sourceHandle: 'right-top', targetHandle: 'bottom-right', label: '7. vouches for you (private ID)', data: lp(65) },
+        { type: 'addEdge', id: 'e-signin-vouch', source: 'entity', target: 'person-agent', sourceHandle: 'right-bottom', targetHandle: 'bottom-right', label: '7. vouches for you (private ID)', data: lp(65) },
         { type: 'pulse', edge: '7. vouches for you (private ID)', durationMs: pulseDuration },
       ],
     },
@@ -454,7 +454,7 @@ function getProcessFlowSteps() {
       phase: 14,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-agent-permask', source: 'person-agent', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'top-left', label: '8. permission for this purchase?', data: lp(70) },
+        { type: 'addEdge', id: 'e-agent-permask', source: 'person-agent', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'top-right', label: '8. permission for this purchase?', data: lp(70) },
         { type: 'pulse', edge: '8. permission for this purchase?', durationMs: pulseDuration },
       ],
     },
@@ -467,7 +467,7 @@ function getProcessFlowSteps() {
       autoRun: true,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-signin-grant', source: 'entity', target: 'person-agent', sourceHandle: 'top-right', targetHandle: 'bottom-right', label: '8. granted (auth token)', data: lp(80) },
+        { type: 'addEdge', id: 'e-signin-grant', source: 'entity', target: 'person-agent', sourceHandle: 'bottom-right', targetHandle: 'bottom-right', label: '8. granted (auth token)', data: lp(80) },
         { type: 'pulse', edge: '8. granted (auth token)', durationMs: pulseDuration },
       ],
     },
@@ -521,7 +521,7 @@ function getProcessFlowSteps() {
       phase: 20,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-signin-unreach', source: 'entity', target: 'person-agent', sourceHandle: 'right-top', targetHandle: 'bottom-right', label: "6. can't reach the Person" },
+        { type: 'addEdge', id: 'e-signin-unreach', source: 'entity', target: 'person-agent', sourceHandle: 'right-bottom', targetHandle: 'bottom-right', label: "6. can't reach the Person" },
         { type: 'pulse', edge: "6. can't reach the Person", durationMs: pulseDuration },
       ],
     },
