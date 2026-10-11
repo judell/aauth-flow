@@ -1,5 +1,5 @@
 <Component name="EntityNode">
-  <ModalDialog id="entityHelp" title="Your sign-in">
+  <ModalDialog id="entityHelp" title="Person Server (your sign-in)">
     <Text>
       Vouches for you: "this person approved this agent." You sign in the usual way (Microsoft here), then confirm the agent. Hellō is the first place you can try it. (Spec term: person server.) The scheduled path, approving later from a link, is inferred from the protocol; the recorded run was interactive.
     </Text>
@@ -7,11 +7,11 @@
   <VStack gap="$space-1" padding="$space-2">
     <HStack verticalAlignment="center" horizontalAlignment="center" gap="$space-2">
       <Icon name="building2" width="24px" height="24px" />
-      <Text fontWeight="bold" fontSize="$fontSize-lg">Your sign-in</Text>
+      <Text fontWeight="bold" fontSize="$fontSize-lg">Person Server (your sign-in)</Text>
       <Icon
         name="info"
-        tooltip="About Your sign-in"
-        aria-label="About Your sign-in"
+        tooltip="About Person Server"
+        aria-label="About Person Server"
         width="24px"
         height="24px"
         color="$color-primary"

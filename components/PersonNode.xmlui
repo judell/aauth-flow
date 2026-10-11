@@ -1,7 +1,7 @@
 <Component name="PersonNode">
-  <ModalDialog id="personHelp" title="You">
+  <ModalDialog id="personHelp" title="Person (you)">
     <Text>
-      The person the agent acts for. You start things: by acting yourself, or by setting up a schedule that acts for you.
+      The Person (spec term): the one the agent acts for, and who is accountable for its actions. You start things: by acting yourself, or by setting up a schedule that acts for you.
     </Text>
   </ModalDialog>
   <VStack
@@ -11,11 +11,11 @@
     horizontalAlignment="center">
     <HStack horizontalAlignment="center" verticalAlignment="center" gap="$space-2">
       <Icon name="person" width="24px" height="24px" />
-      <Text fontWeight="bold" fontSize="$fontSize-lg">You</Text>
+      <Text fontWeight="bold" fontSize="$fontSize-lg">Person (you)</Text>
       <Icon
         name="info"
-        tooltip="About You"
-        aria-label="About You"
+        tooltip="About Person"
+        aria-label="About Person"
         width="24px"
         height="24px"
         color="$color-primary"

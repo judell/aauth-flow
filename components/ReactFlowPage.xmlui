@@ -81,7 +81,7 @@
       <AgreementsPanel />
       <EntityAgentNode />
       <HStack>
-        <H1>
+        <H1 maxWidth="800px">
           {phaseLabel} {phaseMessage}
         </H1>
         <ControlNode />

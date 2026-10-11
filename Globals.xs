@@ -233,7 +233,7 @@ function getProcessFlowSteps() {
     {
       id: 'trigger',
       title: '1',
-      message: 'You buy something, or a schedule does it for you (click Buy to start)',
+      message: 'The Person (you) buys something, or a schedule does it (click Buy to start)',
       actionLabel: '',
       actionEnabled: false,
       phase: 0,
@@ -243,55 +243,55 @@ function getProcessFlowSteps() {
     {
       id: 'ask',
       title: '2',
-      message: 'Your agent needs to call the store, so it first asks its home for an ID card',
+      message: 'The Agent (your assistant) needs to call the Resource (the store), so it first asks its Agent Provider (the agent\'s home) for an agent token (its signed ID)',
       actionLabel: 'Ask',
       phase: 1,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-agent-home', source: 'person-agent', target: 'agreements', sourceHandle: 'top-left', targetHandle: 'bottom-left', label: '2. asks for ID card' },
-        { type: 'pulse', edge: '2. asks for ID card', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-agent-home', source: 'person-agent', target: 'agreements', sourceHandle: 'top-left', targetHandle: 'bottom-left', label: '2. asks for agent token' },
+        { type: 'pulse', edge: '2. asks for agent token', durationMs: pulseDuration },
       ],
     },
     {
       id: 'issue',
       title: '3',
-      message: 'Its home issues the ID card',
+      message: 'The Agent Provider issues the agent token (who the agent is, signed by its provider)',
       actionLabel: 'Issue',
       phase: 2,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-home-agent', source: 'agreements', target: 'person-agent', sourceHandle: 'bottom-right', targetHandle: 'top-right', label: '3. issues ID card' },
-        { type: 'pulse', edge: '3. issues ID card', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-home-agent', source: 'agreements', target: 'person-agent', sourceHandle: 'bottom-right', targetHandle: 'top-right', label: '3. issues agent token' },
+        { type: 'pulse', edge: '3. issues agent token', durationMs: pulseDuration },
       ],
     },
     {
       id: 'request',
       title: '4',
-      message: 'Your agent sends the buy request, signed, with its ID card',
+      message: 'The Agent sends the buy request to the Resource, signed, with its agent token',
       actionLabel: 'Send',
       phase: 3,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-agent-svc', source: 'person-agent', target: 'entity-agent', sourceHandle: 'right-top', targetHandle: 'left-top', label: '4. buy request + ID card' },
-        { type: 'pulse', edge: '4. buy request + ID card', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-agent-svc', source: 'person-agent', target: 'entity-agent', sourceHandle: 'right-top', targetHandle: 'left-top', label: '4. buy request + agent token' },
+        { type: 'pulse', edge: '4. buy request + agent token', durationMs: pulseDuration },
       ],
     },
     {
       id: 'check',
       title: '5',
-      message: "The store checks the card against the home's published key",
+      message: "The Resource checks the agent token against the Agent Provider's published key",
       actionLabel: 'Check',
       phase: 4,
       completeAfterRoundTrip: true,
       run: [
-        { type: 'addEdge', id: 'e-svc-home', source: 'entity-agent', target: 'agreements', sourceHandle: 'top-left', targetHandle: 'right-bottom', label: '5. checks card' },
-        { type: 'pulseRoundTrip', edge: '5. checks card', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-svc-home', source: 'entity-agent', target: 'agreements', sourceHandle: 'top-left', targetHandle: 'right-bottom', label: '5. checks agent token' },
+        { type: 'pulseRoundTrip', edge: '5. checks agent token', durationMs: pulseDuration },
       ],
     },
     {
       id: 'answer',
       title: '6',
-      message: "The store knows which agent this is, but not who it's buying for",
+      message: "The Resource knows which agent this is, but not who it's buying for",
       actionLabel: 'Answer',
       phase: 5,
       completeAfterMs: pulseDuration,
@@ -304,21 +304,21 @@ function getProcessFlowSteps() {
     {
       id: 'vouch',
       title: '7',
-      message: 'The store needs to know who your agent works for, so your agent asks your sign-in to vouch for its person',
+      message: 'The Resource needs to know who the Agent works for, so the Agent asks its Person Server (your sign-in) to vouch for its Person',
       actionLabel: 'Ask',
       phase: 6,
       runningPhase: 6.5,
       completeAfterMs: pulseDuration,
       // Your sign-in's "not involved yet" line clears at phase >= 6.5 (EntityNode)
       run: [
-        { type: 'addEdge', id: 'e-agent-signin', source: 'person-agent', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'top-left', label: '7. vouch for my person?' },
-        { type: 'pulse', edge: '7. vouch for my person?', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-agent-signin', source: 'person-agent', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'top-left', label: '7. requests person token' },
+        { type: 'pulse', edge: '7. requests person token', durationMs: pulseDuration },
       ],
     },
     {
       id: 'reply',
       title: '8',
-      message: 'Your sign-in says a person must approve, and hands back a code',
+      message: 'The Person Server says the Person must approve, and hands back a code',
       actionLabel: 'Reply',
       phase: 7,
       completeAfterMs: pulseDuration,
@@ -331,8 +331,8 @@ function getProcessFlowSteps() {
       id: 'notify',
       title: '9',
       message: trigger === 'scheduled'
-        ? 'Nobody is at the keyboard, so your agent sends you a link to approve within 10 minutes'
-        : 'Your agent shows you where to approve',
+        ? 'Nobody is at the keyboard, so the Agent sends the Person a link to approve within 10 minutes'
+        : 'The Agent shows the Person where to approve',
       actionLabel: 'Notify',
       phase: 8,
       completeAfterMs: pulseDuration,
@@ -344,7 +344,7 @@ function getProcessFlowSteps() {
     {
       id: 'visit',
       title: '10',
-      message: 'You open the link and sign in as usual (Microsoft here)',
+      message: 'The Person opens the link and signs in as usual (Microsoft here)',
       actionLabel: '',
       actionEnabled: false,
       phase: 9,
@@ -358,29 +358,29 @@ function getProcessFlowSteps() {
     {
       id: 'confirm',
       title: '11',
-      message: 'Your sign-in shows which agent is asking. Confirm it (click Confirm in Your sign-in).',
+      message: 'The Person Server shows which agent is asking. Confirm it (click Confirm in Person Server).',
       actionLabel: '',
       actionEnabled: false,
       phase: 10,
-      // Started by the Confirm button in EntityNode; no arrow: it happens on the sign-in's own page
+      // Started by the Confirm button in EntityNode (Person Server); no arrow: it happens on the sign-in's own page
       completeAfterMs: pulseDuration,
     },
     {
       id: 'pass',
       title: '12',
-      message: 'Your sign-in issues a pass: you approved this agent, for this store',
+      message: 'The Person Server issues a person token (proof that you approved this agent, for this store)',
       actionLabel: 'Issue',
       phase: 11,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-signin-pass', source: 'entity', target: 'person-agent', sourceHandle: 'right-top', targetHandle: 'bottom-right', label: '12. pass (person token)' },
-        { type: 'pulse', edge: '12. pass (person token)', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-signin-pass', source: 'entity', target: 'person-agent', sourceHandle: 'right-top', targetHandle: 'bottom-right', label: '12. person token' },
+        { type: 'pulse', edge: '12. person token', durationMs: pulseDuration },
       ],
     },
     {
       id: 'done',
       title: '',
-      message: 'Now your agent can show who it works for. Next: the store asks to see your profile.',
+      message: 'Now the Agent can show who it works for. Next: the Resource asks to see your profile.',
       actionLabel: 'Start over',
       phase: 12,
       restartOnAction: true,
@@ -405,13 +405,13 @@ function makeNode(id, label, extra) {
 
 function getNodes() {
   return [
-    makeNode("person", "You"),
-    makeNode("person-agent", "Your agent"),
-    makeNode("agreements", "Agent's home"),
-    makeNode("entity-agent", "Service"),
+    makeNode("person", "Person"),
+    makeNode("person-agent", "Agent"),
+    makeNode("agreements", "Agent Provider"),
+    makeNode("entity-agent", "Resource"),
     makeNode("control", "Control", { chrome: false }),
     // Last: pairs by order with <EntityNode />, the canvas's last child
-    makeNode("entity", "Your sign-in"),
+    makeNode("entity", "Person Server"),
   ];
 }
 

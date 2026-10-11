@@ -1,17 +1,17 @@
 <Component name="PersonAgentNode">
-  <ModalDialog id="paHelp" title="Your agent">
+  <ModalDialog id="paHelp" title="Agent (your assistant)">
     <Text>
-      An AI agent with its own identity. It signs every request with a key that never leaves this machine, so there's no API key or bearer token to leak.
+      An AI agent with its own identity. It signs every request with a key that never leaves this machine, so there's no API key or bearer token to leak. It carries an agent token (its signed ID) from its Agent Provider, and later a person token (proof that you approved it) from its Person Server.
     </Text>
   </ModalDialog>
   <VStack gap="$space-1" padding="$space-2">
     <HStack verticalAlignment="center" horizontalAlignment="center" gap="$space-2">
       <Icon name="bot" width="24px" height="24px" />
-      <Text fontWeight="bold" fontSize="$fontSize-lg">Your agent</Text>
+      <Text fontWeight="bold" fontSize="$fontSize-lg">Agent (your assistant)</Text>
       <Icon
         name="info"
-        tooltip="About Your agent"
-        aria-label="About Your agent"
+        tooltip="About Agent"
+        aria-label="About Agent"
         width="24px"
         height="24px"
         color="$color-primary"
@@ -19,17 +19,17 @@
         onClick="paHelp.open()" />
     </HStack>
     <Text fontSize="$fontSize-small" color="$textColor-secondary" when="{phase < 3}">
-      no ID card yet
+      no agent token yet
     </Text>
     <VStack gap="$space-1" when="{phase >= 3}">
-      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">ID card</Text>
+      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">agent token (its signed ID)</Text>
       <Text fontSize="$fontSize-small">ID aauth:local@judell.github.io</Text>
-      <Text fontSize="$fontSize-small">home judell.github.io</Text>
+      <Text fontSize="$fontSize-small">Agent Provider judell.github.io</Text>
       <Text fontSize="$fontSize-small">signed with key 2026-10-09_0af</Text>
       <Text fontSize="$fontSize-small">expires in 1 hour</Text>
     </VStack>
     <VStack gap="$space-1" when="{phase >= 12}">
-      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">pass from your sign-in</Text>
+      <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary">person token (you approved this agent)</Text>
       <Text fontSize="$fontSize-small">for whoami.aauth.dev</Text>
       <Text fontSize="$fontSize-small">you approved (Jon, via Hellō)</Text>
       <Text fontSize="$fontSize-small">this agent</Text>

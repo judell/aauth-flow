@@ -1,22 +1,22 @@
 <Component name="EntityAgentNode">
-  <ModalDialog id="eaHelp" title="Service">
-    <Text>The service the agent calls. Here it's a test service that echoes who's calling; imagine a store.</Text>
+  <ModalDialog id="eaHelp" title="Resource (the store)">
+    <Text>The Resource (spec term): the server the agent calls. Here it's a test service that echoes who's calling; imagine a store.</Text>
   </ModalDialog>
   <VStack gap="$space-1" padding="$space-2">
     <HStack verticalAlignment="center" horizontalAlignment="center" gap="$space-2">
       <Icon name="bot" width="24px" height="24px" />
-      <Text fontWeight="bold" fontSize="$fontSize-lg">Service</Text>
+      <Text fontWeight="bold" fontSize="$fontSize-lg">Resource (the store)</Text>
       <Icon
         name="info"
-        tooltip="About Service"
-        aria-label="About Service"
+        tooltip="About Resource"
+        aria-label="About Resource"
         width="24px"
         height="24px"
         color="$color-primary"
         cursor="pointer"
         onClick="eaHelp.open()" />
     </HStack>
-    <Text fontSize="$fontSize-small" color="$textColor-secondary">whoami.aauth.dev · standing in for a store</Text>
+    <Text fontSize="$fontSize-small" color="$textColor-secondary">whoami.aauth.dev, standing in for a store</Text>
     <Text fontSize="$fontSize-small" fontWeight="bold" color="$color-primary" when="{phase >= 5}">
       caller: aauth:local@judell.github.io
     </Text>

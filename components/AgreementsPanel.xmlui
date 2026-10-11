@@ -1,16 +1,16 @@
 <Component name="AgreementsPanel">
-  <ModalDialog id="homeHelp" title="Agent's home">
+  <ModalDialog id="homeHelp" title="Agent Provider (the agent's home)">
     <Text>
       Vouches for the agent, the way an email domain vouches for the name before the @. The agent's ID, aauth:local@judell.github.io, names its home, which publishes the agent's public profile (aauth-agent.json) and key (jwks.json). In the real world, the home is the company that runs your assistant; in this demo, it's Jon's own GitHub site. (Spec term: agent provider.)
     </Text>
   </ModalDialog>
   <VStack gap="$space-1" padding="$space-2">
     <HStack horizontalAlignment="center" verticalAlignment="center" gap="$space-2">
-      <Text fontWeight="bold">Agent's home</Text>
+      <Text fontWeight="bold">Agent Provider (the agent's home)</Text>
       <Icon
         name="info"
-        tooltip="About Agent's home"
-        aria-label="About Agent's home"
+        tooltip="About Agent Provider"
+        aria-label="About Agent Provider"
         width="24px"
         height="24px"
         color="$color-primary"
@@ -18,7 +18,7 @@
         onClick="homeHelp.open()" />
     </HStack>
     <Text fontSize="$fontSize-small" color="$textColor-secondary">
-      vouches for your agent · judell.github.io
+      issues agent tokens · judell.github.io
     </Text>
     <Text fontSize="$fontSize-small">publishes: profile (judell)</Text>
     <Text fontSize="$fontSize-small">publishes: public key 2026-10-09_0af</Text>
