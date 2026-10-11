@@ -12,40 +12,11 @@
   global.stepIndex="{0}"
   global.pulse="{{ active: false, edges: [], step: -1, currentEdge: '' }}"
   global.layout="{null}">
-  <DataSource
-    id="readmeData"
-    url="{'https://api.github.com/repos/judell/myterms/readme'}"
-    headers="{{
-      Accept: 'application/vnd.github.v3+json'
-    }}" />
-
-  <Theme maxWidth-ModalDialog="90%" maxHeight-ModalDialog="90vh">
-    <ModalDialog id="helpDialog" showCloseButton="true">
-      <Markdown
-        when="{readmeData.value}"
-        content="{window.decodeBase64(readmeData.value.content)}"
-        fontSize="$fontSize-sm"
-        lineHeight="1.3"
-        padding="0"
-        margin="0"
-        openLinkInNewTab="true" />
-    </ModalDialog>
-  </Theme>
-
   <AppHeader>
     <Text fontWeight="bold">
       AAuth Walkthrough
     </Text>
     <SpaceFiller />
-    <Icon
-      name="message-circle-question"
-      tooltip="Help"
-      aria-label="Help"
-      width="20px"
-      height="20px"
-      color="$color-surface-500"
-      cursor="pointer"
-      onClick="helpDialog.open()" />
     <Icon
       name="save"
       tooltip="Save layout"
