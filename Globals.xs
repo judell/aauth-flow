@@ -280,29 +280,39 @@ function getProcessFlowSteps() {
       ],
     },
     {
-      id: 'confirm',
+      id: 'visit',
       title: '10',
-      message: 'You sign in as usual (Microsoft here) and confirm this agent (click Confirm in Your sign-in)',
+      message: 'You open the link and sign in as usual (Microsoft here)',
       actionLabel: '',
       actionEnabled: false,
       phase: 9,
-      // Started by the Confirm button in EntityNode, not by the control button
+      // Started by the Open link button in PersonNode, not by the control button
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-you-signin', source: 'person', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'left-top', label: '10. sign in + Confirm' },
-        { type: 'pulse', edge: '10. sign in + Confirm', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-you-signin', source: 'person', target: 'entity', sourceHandle: 'bottom-left', targetHandle: 'left-top', label: '10. open link + sign in' },
+        { type: 'pulse', edge: '10. open link + sign in', durationMs: pulseDuration },
       ],
     },
     {
-      id: 'pass',
+      id: 'confirm',
       title: '11',
+      message: 'Your sign-in shows which agent is asking. Confirm it (click Confirm in Your sign-in).',
+      actionLabel: '',
+      actionEnabled: false,
+      phase: 10,
+      // Started by the Confirm button in EntityNode; no arrow: it happens on the sign-in's own page
+      completeAfterMs: pulseDuration,
+    },
+    {
+      id: 'pass',
+      title: '12',
       message: 'Your sign-in issues a pass: you approved this agent, for this store',
       actionLabel: 'Issue',
-      phase: 10,
+      phase: 11,
       completeAfterMs: pulseDuration,
       run: [
-        { type: 'addEdge', id: 'e-signin-pass', source: 'entity', target: 'person-agent', sourceHandle: 'right-top', targetHandle: 'bottom-right', label: '11. pass (person token)' },
-        { type: 'pulse', edge: '11. pass (person token)', durationMs: pulseDuration },
+        { type: 'addEdge', id: 'e-signin-pass', source: 'entity', target: 'person-agent', sourceHandle: 'right-top', targetHandle: 'bottom-right', label: '12. pass (person token)' },
+        { type: 'pulse', edge: '12. pass (person token)', durationMs: pulseDuration },
       ],
     },
     {
@@ -310,7 +320,7 @@ function getProcessFlowSteps() {
       title: '',
       message: 'Now your agent can show who it works for. Next: the store asks to see your profile.',
       actionLabel: 'Start over',
-      phase: 11,
+      phase: 12,
       restartOnAction: true,
     },
   ];

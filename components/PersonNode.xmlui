@@ -31,6 +31,11 @@
       <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 9 && trigger === 'interactive'}">
         approve: code HBHK-S3ZN · on screen now
       </Text>
+      <Button
+        label="Open link"
+        enabled="{!running}"
+        when="{phase === 9 && trigger === 'interactive'}"
+        onClick="nextStep()" />
     </VStack>
     <ContentSeparator />
     <VStack gap="$space-1" height="*" verticalAlignment="center" horizontalAlignment="center">
@@ -49,6 +54,11 @@
       <Text fontSize="$fontSize-small" fontWeight="bold" when="{phase >= 9 && trigger === 'scheduled'}">
         approve: code HBHK-S3ZN · on your phone, within 10 min
       </Text>
+      <Button
+        label="Open link"
+        enabled="{!running}"
+        when="{phase === 9 && trigger === 'scheduled'}"
+        onClick="nextStep()" />
     </VStack>
   </VStack>
 </Component>
